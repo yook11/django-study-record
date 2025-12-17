@@ -1,0 +1,14 @@
+# 仮想環境（重すぎるので上げない）
+django_env/
+venv/
+.venv/
+
+# データベース（個人のデータなので上げない）
+db.sqlite3
+
+# Pythonのコンパイルファイル（自動生成されるので不要）
+__pycache__/
+*.pyc
+
+# Macの不要なファイル
+.DS_Store

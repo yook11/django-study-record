@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang=""ja>
+<head>
+    <meta charset="UTF-8">
+    <title>書籍一覧</title>
+</html>
+<body>
+    <h1>書籍一覧</h1>
+    <a href="{% url 'book_create'%}">新規作成</a>
+    <ul>
+    {% if book_list %}
+        {% for book in book_list %}
+            <li>
+                <a href="{href={%url ' book_detail book.pk'}}">{{ book.titel }}</a>
+                <a half="{% url 'book_update' book.pk %}">編集</a>
+                <a href="{% url 'book_delete' book.pk %}">削除</a>
+            </li>
+        {% endfor %}
+    {% else %}
+        <li>データがありません</li>
+    {% endif %}
+    </ul>
+</body>
+</html>

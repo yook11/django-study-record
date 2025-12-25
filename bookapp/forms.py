@@ -5,4 +5,4 @@ class BookForm(forms.ModelForm):
 
     class Meta:
         model = Book
-        fields = ['title', 'autehor', 'publication_date']
+        fields = ['title', 'author', 'publication_date']

@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 
@@ -8,5 +8,4 @@ urlpatterns = [
     path('new/', views.book_create, name='book_create'),
     path('<int:pk>/edit/', views.book_update, name='book_update'),
     path('<int:pk>/delete/', views.book_delete, name='book_delete'),
-    path('exe02/', include('bookapp.urls')),
 ]

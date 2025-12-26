@@ -11,7 +11,7 @@
     {% if book_list %}
         {% for book in book_list %}
             <li>
-                <a href="{href={%url ' book_detail book.pk'}}">{{ book.titel }}</a>
+                <a href="{href={%url ' book_detail book.pk'}}">{{ book.title }}</a>
                 <a half="{% url 'book_update' book.pk %}">編集</a>
                 <a href="{% url 'book_delete' book.pk %}">削除</a>
             </li>

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Book
 from .forms import BookForm
+from django import messages
 
 # Create your views here.
 def book_list(request):
@@ -46,8 +47,18 @@ def book_delete(request, pk):
     return render(request, 'bookapp/book_confirm_delete.html', {'book': target})
 
 
+#メッセージフレームワークのサンプル
+#メッセージの追加
+def add_messages(request):
+    messages.success(request, 'これは成功メッセージです。')
+    messages.error(request, 'これはエラーメッセージです。')
+    messages.info(request, 'これは情報メッセージです。')
+    messages.warning(request, 'これは警告メッセージです。')
+    messages.debug(request, 'これはデバッグメッセージです。')
+    return redirect('display_messages')
 
-
-    
+#メッセージの表示
+def show_display_messages(request):
+    return render(request, 'bookapp/show_all_messages.html')
 
 

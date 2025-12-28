@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Book
 from .forms import BookForm
-from django import messages
+from django.contrib import messages
 
 # Create your views here.
 def book_list(request):
@@ -19,6 +19,7 @@ def book_create(request):
         form = BookForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, '書籍が正常に登録されました。')
             return redirect('book_list')
     else:
         form = BookForm()
@@ -32,6 +33,7 @@ def book_update(request, pk):
         form = BookForm(request.POST, instance=target)
         if form.is_valid():
             form.save()
+            messages.success(request, '書籍が正常に更新されました。')
             return redirect('book_list')
     else:
         form = BookForm(instance=target)
@@ -43,6 +45,7 @@ def book_delete(request, pk):
     target = get_object_or_404(Book, pk=pk)
     if request.method =='POST':
         target.delete()
+        messages.success(request, '書籍が正常に削除されました。')
         return redirect('book_list')
     return render(request, 'bookapp/book_confirm_delete.html', {'book': target})
 

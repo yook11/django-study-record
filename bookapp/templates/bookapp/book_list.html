@@ -6,6 +6,15 @@
 </html>
 <body>
     <h1>書籍一覧</h1>
+    {% comment %} 4.7 {% endcomment %}
+    {% if messages %}
+        <ul class="message">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% comment %} 4.7 {% endcomment %}
     <a href="{% url 'book_create'%}">新規作成</a>
     <ul>
     {% if book_list %}

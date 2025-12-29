@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ book.title }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'main.css' %}">
 </head>
 <body>
     <h1>{{ book.title }}</h1>

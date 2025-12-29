@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ book.title }}の削除確認</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'main.css' %}">
 </head>
 <body>
     <h1>{{ book.title }}を削除しますか？</h1>

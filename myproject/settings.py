@@ -118,5 +118,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [BASE_DIR / "static",]
+
 from django.contrib.messages import constants as message_constants
 MESSAGE_LEVEL = message_constants.DEBUG

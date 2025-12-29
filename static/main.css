@@ -1,0 +1,15 @@
+body {
+    font-family: 'HGP創英角ゴシックUB', sans-serif;
+}
+
+h1 {
+    color: #6e6c6c;
+}
+
+a {
+    color: #50db34;
+}
+
+a:hover {
+    color: #1e80d5;
+}

@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Book
 from .forms import BookForm
 from django.contrib import messages
+import os
+from django .conf import settings
 
 # Create your views here.
 def book_list(request):
@@ -31,6 +33,8 @@ def book_update(request, pk):
     target = get_object_or_404(Book, pk=pk)
     if request.method == 'POST':
         form = BookForm(request.POST, request.FILES, instance=target)
+        if 'cover_image-clear' in request.POST:
+            cover_image_delete(target)
         if form.is_valid():
             form.save()
             messages.success(request, '書籍が正常に更新されました。')
@@ -44,6 +48,7 @@ def book_update(request, pk):
 def book_delete(request, pk):
     target = get_object_or_404(Book, pk=pk)
     if request.method =='POST':
+        cover_image_delete(target)
         target.delete()
         messages.success(request, '書籍が正常に削除されました。')
         return redirect('book_list')
@@ -63,5 +68,13 @@ def add_messages(request):
 #メッセージの表示
 def show_display_messages(request):
     return render(request, 'bookapp/show_all_messages.html')
+
+#画像ファイルの削除
+def cover_image_delete(target):
+    if target.cover_image:
+        image_path = settings.MEDIA_ROOT / target.cover_image.name
+
+        if image_path.exists():
+            image_path.unlink()
 
 

@@ -17,6 +17,17 @@ class BookForm(forms.ModelForm):
         widgets = {
             'publication_date': forms.DateInput(attrs={'type': 'date'})
         }
+
+        error_messages = {
+            'title':{
+                'max_length': 'タイトルは20文字以内で入力してください',
+                'required': 'タイトルを入力してください',
+            },
+            'author': {
+                'max_length': '著者名は10文字以内で入力してください',
+                'required': '著者名を入力してください',
+            }
+        }
     
     def clean_title(self):
         title = self.cleaned_data.get('title')

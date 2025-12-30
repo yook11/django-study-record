@@ -13,3 +13,8 @@ a {
 a:hover {
     color: #1e80d5;
 }
+
+.book-cover {
+    width: 150px;
+    height: auto;
+}

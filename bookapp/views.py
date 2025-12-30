@@ -16,7 +16,7 @@ def book_detail(request, pk):
 
 def book_create(request):
     if request.method == 'POST':
-        form = BookForm(request.POST)
+        form = BookForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, '書籍が正常に登録されました。')
@@ -30,7 +30,7 @@ def book_create(request):
 def book_update(request, pk):
     target = get_object_or_404(Book, pk=pk)
     if request.method == 'POST':
-        form = BookForm(request.POST, instance=target)
+        form = BookForm(request.POST, request.FILES, instance=target)
         if form.is_valid():
             form.save()
             messages.success(request, '書籍が正常に更新されました。')

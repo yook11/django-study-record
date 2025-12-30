@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -122,3 +121,9 @@ STATICFILES_DIRS = [BASE_DIR / "static",]
 
 from django.contrib.messages import constants as message_constants
 MESSAGE_LEVEL = message_constants.DEBUG
+
+# 画像を表示する時のURL
+MEDIA_URL = '/media/'
+
+# 画像を保存する場所（os.path.join ではなく、スラッシュで繋げます）
+MEDIA_ROOT = BASE_DIR / 'media'

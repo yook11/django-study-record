@@ -4,13 +4,13 @@ from django.db import models
 
 class Book(models.Model):
 
-    title = models.CharField(max_length=20)
+    title = models.CharField(verbose_name='タイトル', max_length=20)
 
-    author = models.CharField(max_length=10)
+    author = models.CharField(verbose_name='著者', max_length=10)
 
-    publication_date = models.DateField()
+    publication_date = models.DateField(verbose_name='出版日')
 
-    cover_image = models.ImageField(upload_to='book_covers', blank=True, null=True)
+    cover_image = models.ImageField(verbose_name='表紙画像', upload_to='book_covers', blank=True, null=True)
 
 
     def __str__(self):

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>メニュー画面</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <link rel="stylesheet" href="{% static 'menu.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="menu-header">メニュー画面</h1>
+        <div class="menu-container">
+            <a href="{% url 'hello' %}" class="menu-item">Helloアプリへ</a>
+            <a href="{% url 'book_list' %}" class="menu-item">書籍アプリへ</a>
+            {% comment %}
+            <a href="{% url 'todo_list' %}" class="menu-item">ToDoアプリへ</a>
+            {% endcomment %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+/* 画面全体を少し中央に寄せる設定 */
+.container {
+    width: 100%;
+    max-width: 600px; /* 横に広がりすぎないように制限 */
+    margin: 50px auto; /* 上下に50pxの余白、左右は自動で中央寄せ */
+    text-align: center; /* 文字を真ん中に揃える */
+}
+
+/* タイトルのデザイン */
+.menu-header {
+    font-size: 2rem;       /* 文字を大きく */
+    color: #333333;        /* 濃いグレー（真っ黒より目に優しい） */
+    margin-bottom: 40px;   /* 下のボタンとの間隔を空ける */
+    border-bottom: 2px solid #ddd; /* 下に薄い線を入れる */
+    padding-bottom: 10px;
+}
+
+/* ボタンを並べるエリア */
+.menu-container {
+    display: flex;         /* フレックスボックス（並べるための魔法） */
+    flex-direction: column; /* 縦並びにする */
+    gap: 20px;             /* ボタン同士の間隔を20px空ける */
+}
+
+/* 各メニューのボタンデザイン */
+.menu-item {
+    display: block;        /* リンクをブロック要素（箱）にする */
+    padding: 20px;         /* ボタンの内側の広さ */
+    background-color: #007bff; /* 背景色：鮮やかな青 */
+    color: white;          /* 文字色：白 */
+    text-decoration: none; /* リンクの下線を消す */
+    font-size: 1.2rem;     /* 文字サイズ */
+    font-weight: bold;     /* 太文字 */
+    border-radius: 10px;   /* 角を丸くする（今の流行り） */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* ほんのり影をつける */
+    transition: 0.3s;      /* ホバー時の変化をふんわりさせる */
+}
+
+/* マウスを乗せた時（ホバー）の動き */
+.menu-item:hover {
+    background-color: #0056b3; /* 色を少し濃くする */
+    transform: translateY(-2px); /* ほんの少し上に浮き上がる演出 */
+    box-shadow: 0 6px 8px rgba(0,0,0,0.2); /* 影を濃くする */
+}

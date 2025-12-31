@@ -1,8 +1,24 @@
-from django.shortcuts import render
-
-
-# Create your views here.
+# HttpResponseクラスをインポート
 from django.http import HttpResponse
 
+# ------------------------------------------------------------------
+# ビュー関数を定義
+# "ハロー、Django!"というテキストを含むHTTPレスポンスを返す
+# ------------------------------------------------------------------
 def show_hello(request):
-    return HttpResponse("ハロー、Django!")
+    # ▽▽▽▽▽ 7.6 ▽▽▽▽▽
+    html_content = """
+    <!DOCTYPE html>
+    <html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>Hello Django</title>
+    </head>
+    <body>
+        <p>ハロー、Django！</p>
+        <a href="/menu/">メニューに戻る</a>
+    </body>
+    </html>
+    """
+    return HttpResponse(html_content)
+    # △△△△△ 7.6 △△△△△

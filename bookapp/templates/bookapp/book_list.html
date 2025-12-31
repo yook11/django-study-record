@@ -18,6 +18,8 @@
     {% endif %}
     {% comment %} 4.7 {% endcomment %}
     <a href="{% url 'book_create'%}">新規作成</a>
+    <br>
+    <a href="{% url 'menu' %}">メニューに戻る</a>
     <ul>
     {% if book_list %}
         {% for book in book_list %}

@@ -26,4 +26,5 @@ urlpatterns = [
     path('exe01/', include('helloapp.urls')),
     path('exe02/', include('bookapp.urls')),
     path('menu/', views.MenuPageView.as_view(), name='menu'),
+    path('exe03/', include('todoapp.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -4,6 +4,7 @@ from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView)
 from django.utils.timezone import localtime
 from django.urls import reverse_lazy
+from .forms import TodoForm
 
 class TodoListView(ListView):
     model = models.Todo
@@ -18,14 +19,14 @@ class TodoDetailView(DetailView):
 class TodoCreateView(CreateView):
     model = models.Todo
     template_name = 'todoapp/todo_create.html'
-    fields = ['title', 'memo', 'completed']
+    form_class = TodoForm
     success_url = reverse_lazy('todo_list')
 
 
 class TodoupdateView(UpdateView):
     model = models.Todo
     template_name = 'todoapp/todo_update.html'
-    fields = ['title', 'memo', 'completed']
+    form_class = TodoForm
     success_url = reverse_lazy('todo_list')
 
     def form_vaild(self, form):

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>削除確認</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'todoapp/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>ToDoの削除</h1>
+        <hr>
+        
+        <div class="delete-confirmation">
+            <p>以下のToDoを削除してもよろしいですか？</p>
+            
+            <div class="todo-detail-card">
+                <h2>{{ object.title }}</h2>
+                <p>{{ object.memo }}</p>
+            </div>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">削除</button>
+            <a href="{% url 'todo_list' %}" class="btn btn-secondary">キャンセル</a>
+        </form>
+    </div>
+</body>
+</html>

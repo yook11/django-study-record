@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from . import models
 from django.views.generic import (
-    ListView, DetailView, CreateView, UpdateView,)
+    ListView, DetailView, CreateView, UpdateView, DeleteView)
 from django.utils.timezone import localtime
 from django.urls import reverse_lazy
 
@@ -32,4 +32,10 @@ class TodoupdateView(UpdateView):
         todo = form.save()
         print(f"タイトル: '{todo.title}' 更新時間: {localtime(todo.updated)}")
         return super().form_vaild(form)
+
+class TodoDeleteView(DeleteView):
+    model = models.Todo
+    template_name = 'todoapp/todo_confirm_delete.html'
+    success_url = reverse_lazy('todo_list')
+
 

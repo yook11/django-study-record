@@ -10,7 +10,11 @@
     <div class="container">
         <h1>すること一覧</h1>
         <hr>
-        
+        <!-- 新規登録ボタン -->
+        <div class="action-buttons">
+            <a href="{% url 'todo_create' %}" class="btn btn-primary">新規登録</a>
+            <a href="{% url 'menu' %}" class="btn btn_secondary">メニューへ</a>
+        </div>
         <ul class="todo-list">
             {% for todo in todos %}
                 <li class="todo-item {% if todo.completed %}completed{% else %}not-completed{% endif %}">
@@ -29,6 +33,10 @@
                     </div>
                     <div class="todo-date">
                         更新日: {{ todo.updated|date:"Y年m月d日 H:i:s" }}
+                    </div>
+                    <div class ="todo-actions">
+                        <a href="{% url 'todo_detail' todo.id %}" class="btn btn-info">詳細</a>
+                        <a href="{% url 'todo_update' todo.id %}" class="btn btn-warning">更新</a>
                     </div>
                 </li>
             {% endfor %}

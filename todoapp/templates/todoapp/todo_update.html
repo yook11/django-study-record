@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>編集</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'todoapp/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>することの修正</h1>
+        <hr>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">更新</button>
+        </form>
+
+        <br>
+        <div class="back-button">
+            <a href="{% url 'todo_list' %}" class="btn btn-secondary">一覧に戻る</a>
+        </div>
+    </div>
+</body>
+</html>

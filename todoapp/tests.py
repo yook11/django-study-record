@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.urls import reverse
 from .models import Todo
 
 class TodoModelTests(TestCase):
@@ -22,3 +23,14 @@ class TodoModelTests(TestCase):
         # 保存されたデータのタイトルは「テストタスク」のはずだよね？
         actual_todo = saved_todos[0]
         self.assertEqual(actual_todo.title, "テストタスク")
+    
+class LoginAccessTests(TestCase):
+    def test_create_todo_requires_login(self):
+        """ログインしていないユーザーは新規作成ページに入れないはず"""
+        
+        # 1. ログインせずに作成ページ(/create/)にアクセスしてみる
+        response = self.client.get(reverse('todo_create'))
+        
+        # 2. 本来は「ダメだよ」と追い返される（リダイレクト 302）はず。
+        #    もし普通に入れてしまったら(200 OK)、このテストは「失敗」する。
+        self.assertNotEqual(response.status_code, 200)

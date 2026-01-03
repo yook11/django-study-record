@@ -14,6 +14,17 @@
 <body>
     <div class="container">
         <h1>すること一覧</h1>
+        <div class="user-info" style="text-align: right; margin-bottom: 20px;">
+    {% if user.is_authenticated %}
+        <span>こんにちは、<strong>{{ user.username }}</strong> さん</span>
+        <form action="{% url 'logout' %}" method="post" style="display: inline; margin-left: 10px;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-secondary" style="padding: 5px 15px; font-size: 0.8rem;">ログアウト</button>
+        </form>
+    {% else %}
+        <a href="{% url 'login' %}" class="btn btn-primary">ログイン</a>
+    {% endif %}
+</div>
         <hr>
 
         {% if messages %}

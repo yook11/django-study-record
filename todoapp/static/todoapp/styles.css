@@ -1,0 +1,162 @@
+/* 全体の設定：背景色を少しグレーにして、フォントを適用 */
+body {
+    background-color: #f4f7f6;
+    font-family: 'Noto Sans JP', sans-serif;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+/* アクションボタンエリア */
+.action-buttons {
+    display: flex;
+    justify-content: flex-end; /* 右寄せ */
+    gap: 15px; /* ボタン同士の間隔 */
+    margin-bottom: 20px;
+}
+
+.btn {
+    border-radius: 50px; /* 丸みのあるボタン */
+    padding: 10px 25px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    border: none;
+}
+
+.btn:hover {
+    transform: translateY(-2px); /* ホバー時に少し浮く */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* ボタンの色設定 */
+.btn-primary { background-color: #4a90e2; color: white; }
+.btn-secondary { background-color: #95a5a6; color: white; }
+.btn-info { background-color: #17a2b8; color: white; }
+.btn-warning { background-color: #ffc107; color: #333; }
+.btn-danger { background-color: #e74c3c; color: white; }
+
+/* ToDoリストのスタイル（カード化） */
+.todo-list {
+    list-style: none; /* 点を消す */
+    padding: 0;
+}
+
+.todo-item {
+    background: white;
+    border-radius: 12px; /* 角丸 */
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* 優しい影 */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-left: 5px solid #ddd; /* 左側のアクセント線 */
+    position: relative; /* 内部要素の配置基準 */
+}
+
+/* ホバー時の動き */
+.todo-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* 完了済みのデザイン */
+.todo-item.completed {
+    background-color: #f9f9f9;
+    border-left-color: #28a745; /* 緑色の線 */
+    opacity: 0.8;
+}
+
+.todo-item.not-completed {
+    border-left-color: #e74c3c; /* 未完了は赤色の線 */
+}
+
+.todo-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.todo-memo {
+    color: #666;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+    white-space: pre-wrap; /* 改行を反映 */
+}
+
+/* ステータスバッジ */
+.todo-status {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: white;
+}
+
+.todo-status.completed { background-color: #28a745; }
+.todo-status.not-completed { background-color: #e74c3c; }
+
+.todo-date {
+    font-size: 0.8rem;
+    color: #aaa;
+    margin-top: 5px;
+    text-align: right;
+}
+
+.todo-actions {
+    margin-top: 15px;
+    text-align: right; /* ボタンを右寄せ */
+}
+
+/* ▼▼▼ メッセージ（通知）エリア（前回のまま維持） ▼▼▼ */
+.messages {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    width: 300px;
+}
+
+.message {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    color: #fff;
+    background-color: #28a745;
+    position: relative;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+.message.fade-out { opacity: 0; }
+
+.message::before {
+    font-family: "Font Awesome 6 Free";
+    content: "\f05a";
+    font-weight: 900;
+    margin-right: 10px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    opacity: 0.7;
+}
+.close-btn:hover { opacity: 1; }

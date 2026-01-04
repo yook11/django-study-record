@@ -14,6 +14,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 class TodoBaseView(LoginRequiredMixin, SuccessMessageMixin):
     model = models.Todo
     success_url = reverse_lazy('todo_list')
+
+    def get_queryset(self):
+        return super().get_queryset().filter(user=self.request.user)
+    
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)   
     # ここに共通の設定をまとめておくことができます
 
 # ==========================================

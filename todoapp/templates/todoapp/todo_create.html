@@ -1,25 +1,27 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>新規作成</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'todoapp/styles.css' %}">
-</head>
-<body>
-    <div class="container">
-        <h1>することの新規作成</h1>
-        <hr>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">新規登録</button>
-        </form>
+{% extends 'base.html' %}
 
-        <br>
-        <div class="back-button">
-            <a href="{% url 'todo_list' %}" class="btn btn-secondary">一覧に戻る</a>
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0">新規タスク作成</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ form.as_p }}
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">保存する</button>
+                            <a href="{% url 'todo_list' %}" class="btn btn-secondary">キャンセル</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

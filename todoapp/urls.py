@@ -14,4 +14,7 @@ urlpatterns = [
     path('<int:pk>/edit/', views.TodoUpdateView.as_view(), name='todo_update'),
 
     path('<int:pk>/delete/', views.TodoDeleteView.as_view(), name='todo_delete'),
+
+    path('signup/', views.SignUpView.as_view(), name='signup'),
+    
 ]

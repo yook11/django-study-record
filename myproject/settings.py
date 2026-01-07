@@ -129,3 +129,7 @@ MEDIA_URL = '/media/'
 
 # 画像を保存する場所（os.path.join ではなく、スラッシュで繋げます）
 MEDIA_ROOT = BASE_DIR / 'media'
+
+LOGIN_REDIRECT_URL = 'todo_list'
+
+LOGOUT_REDIRECT_URL = 'login'

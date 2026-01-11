@@ -16,5 +16,7 @@ urlpatterns = [
     path('<int:pk>/delete/', views.TodoDeleteView.as_view(), name='todo_delete'),
 
     path('signup/', views.SignUpView.as_view(), name='signup'),
+
+    path('analytics/', views.TodoAnalyticsView.as_view(), name='todo_analytics'),
     
 ]

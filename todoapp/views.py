@@ -117,7 +117,32 @@ class TodoAnalyticsView(View):
             ax2.set_xlabel('Date')
             ax2.set_ylabel('Number of Tasks')
 
+          
+        # ---------- ③ グラフをイメージデータに変換 ----------
+        # メモリ上に一時的なバッファを作成
+        buffer = io.BytesIO()
+        # グラフのレイアウトを調整（グラフ同士が重ならないように）
+        plt.tight_layout()
+        # グラフをPNG形式で一時バッファに保存
+        plt.savefig(buffer, format='png')
+        # バッファの読み取り位置を先頭に戻す
+        buffer.seek(0)
+        # バッファからイメージデータを取得
+        image_png = buffer.getvalue()
+        # バッファを閉じる
+        buffer.close()
 
+        # イメージデータをBase64形式（テキスト形式）に変換
+        # これによりHTMLに直接埋め込めるようになる
+        graph = base64.b64encode(image_png).decode('utf-8')
 
+        # ---------- ④ テンプレートにデータを渡す ----------
 
+        # テンプレートに渡すデータを辞書で準備
+        context = {
+            'stats': stats,
+            'graph': graph,
+        }
+        # テンプレートをレンダリングしてHTMLを生成し、レスポンスとして返す
+        return render(request, self.template_name, context)
 

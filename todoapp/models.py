@@ -23,7 +23,7 @@ class Todo(models.Model):
         ordering = ['-created']
 
     @classmethod
-    def get_completion(cls):
+    def get_completion_stats(cls):
         """完了済み、および未完了のタスクを集計して返す"""
         #全てのタスクを取得
         todos = cls.objects.all()

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'helloapp',
     'bookapp',
     'todoapp',
+    'educationapp',
 ]
 
 MIDDLEWARE = [

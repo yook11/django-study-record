@@ -10,4 +10,5 @@ urlpatterns = [
     path('<int:pk>/delete/', views.book_delete, name='book_delete'),
     path('messages/', views.add_messages, name='add_messages'),
     path('display/', views.show_display_messages, name='display_messages'),
+    path('educationapp/', include('educationapp.urls')),
 ]

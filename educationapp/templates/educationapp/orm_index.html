@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Django ORM 操作一覧</title>
+</head>
+<body>
+    <h1>Django ORM 操作一覧</h1>
+    <p>以下のリンクからDjango ORMの操作を確認できます。</p>
+    <hr>
+    <ul>
+        <li>
+            <a href="{% url 'student_list' %}">
+                全ての生徒データを取得 (all)
+            </a>
+        </li>
+        {% comment %}
+        <li>
+            <a href="{% url 'student_join_profile' %}">
+                1対1 : 結合 (OneToOneField)</a>
+        </li>
+        <li>
+            <a href="{% url 'students_by_class' %}">
+                1対多 : 結合 (ForeignKey)
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'student_join_table_courses' %}">
+                多対多 : 中間テーブル (ManyToManyField)
+            </a>
+        </li>
+        {% endcomment %}
+    </ul>
+    <a href="{% url 'menu' %}">メニューに戻る</a>
+</body>
+</html>

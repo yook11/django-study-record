@@ -14,7 +14,7 @@ from django.utils.timezone import localtime
 from django.urls import reverse_lazy
 from .forms import TodoForm
 from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 # ==========================================
 # 共通のベースView：ログイン必須 ＋ メッセージ対応

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>生徒詳細</title>
+</head>
+<body>
+    <h1>生徒の詳細情報</h1>
+    <hr>
+    <p><strong>名前:</strong> {{ student.name }}</p>
+    <p><strong>年齢:</strong> {{ student.age }}</p>
+    <p><strong>入学日:</strong> {{ student.enrollment_date }}</p>
+    <a href="{% url 'student_list' %}">生徒リストに戻る</a>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>生徒リスト</title>
+</head>
+<body>
+    <h1>生徒リスト</h1>
+    <hr>
+    
+    <strong>抽出 (filter) </strong>
+    <form method="get" action="{% url 'students_where' %}">
+        <label for="name">名前:</label>
+        <input type="text" id="name" name="name" placeholder="名前の一部を入力"
+               value="{{ request.GET.name|default:'' }}">
+        <br>
+
+        <label for="age">年齢:</label>
+        <input type="number" id="age" name="age" placeholder="年齢を入力"
+               value="{{ request.GET.age|default:'' }}">
+
+        <label for="age_operator">年齢条件:</label>
+        <select name="age_operator" id="age_operator">
+            <option value="">選択</option>
+            
+            <option value="lt" {% if request.GET.age_operator == 'lt' %}selected{% endif %}>
+                未満
+            </option>
+            
+            <option value="eq" {% if request.GET.age_operator == 'eq' %}selected{% endif %}>
+                同値
+            </option>
+            
+            <option value="gt" {% if request.GET.age_operator == 'gt' %}selected{% endif %}>
+                より大きい
+            </option>
+        </select>
+
+        <button type="submit">実行</button>
+        <br>
+        <button type="button" onclick="location.href=location.pathname">
+            リセット
+        </button>
+    </form>
+    <hr>
+    <table border="1">
+        <tr>
+            <th>名前</th>
+            <th>年齢</th>
+            <th>入学日</th>
+        </tr>
+        {% for student in students %}
+        <tr>
+            <td>
+                <a href="{% url 'student_detail' student.id %}">
+                    {{ student.name }}
+                </a>
+            </td>
+            <td>{{ student.age }}</td>
+            <td>{{ student.enrollment_date }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">生徒が登録されていません。</td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+    <br>
+    <a href="{% url 'orm_index' %}">Django ORM 操作一覧へ</a>
+</body>
+</html>

@@ -1,0 +1,52 @@
+[
+    {
+        "model": "educationapp.profile",
+        "pk": 1,
+        "fields": {
+            "student": 1,
+            "address": "東京都新宿区1-1-1",
+            "phone_number": "090-1234-5678",
+            "bio": "麻雀が得意な学生です。"
+        }
+    },
+    {
+        "model": "educationapp.profile",
+        "pk": 2,
+        "fields": {
+            "student": 2,
+            "address": "神奈川県横浜市2-2-2",
+            "phone_number": "080-2345-6789",
+            "bio": "サッカー部に所属しています。"
+        }
+    },
+    {
+        "model": "educationapp.profile",
+        "pk": 3,
+        "fields": {
+            "student": 3,
+            "address": "大阪府大阪市3-3-3",
+            "phone_number": "070-3456-7890",
+            "bio": "プロレスが趣味の学生です。"
+        }
+    },
+    {
+        "model": "educationapp.profile",
+        "pk": 4,
+        "fields": {
+            "student": 4,
+            "address": "北海道札幌市4-4-4",
+            "phone_number": "090-4567-8901",
+            "bio": "MMAが得意な学生です。"
+        }
+    },
+    {
+        "model": "educationapp.profile",
+        "pk": 5,
+        "fields": {
+            "student": 5,
+            "address": "福岡県福岡市5-5-5",
+            "phone_number": "080-5678-9012",
+            "bio": "柔術が好きな学生です。"
+        }
+    }
+]

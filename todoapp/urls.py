@@ -3,6 +3,7 @@ from . import views
 
 # todoapp/urls.py
 urlpatterns = [
+    path('', lambda request: redirect('menu'), name='home'),
     # ① まず一覧を表示する（ここにアクセスしてボタンを押す）
     path('list/', views.TodoListView.as_view(), name='todo_list'),
 

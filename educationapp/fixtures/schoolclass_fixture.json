@@ -1,0 +1,26 @@
+[
+    {
+        "model": "educationapp.schoolclass",
+        "pk": 1,
+        "fields": {
+            "name": "特進クラス",
+            "description": "進学を目指す生徒向けの特別進学クラスです。"
+        }
+    },
+    {
+        "model": "educationapp.schoolclass",
+        "pk": 2,
+        "fields": {
+            "name": "普通クラス",
+            "description": "一般的な学習プランを提供するクラスです。"
+        }
+    },
+    {
+        "model": "educationapp.schoolclass",
+        "pk": 3,
+        "fields": {
+            "name": "スポーツクラス",
+            "description": "スポーツに特化したカリキュラムを提供するクラスです。"
+        }
+    }
+]

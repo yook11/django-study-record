@@ -1,0 +1,32 @@
+[
+    {
+        "model": "educationapp.course",
+        "pk": 1,
+        "fields": {
+            "title": "Python基礎",
+            "description": "プログラミング初心者向けのPython入門コースです。",
+            "start_date": "2024-01-01",
+            "end_date": "2024-03-31"
+        }
+    },
+    {
+        "model": "educationapp.course",
+        "pk": 2,
+        "fields": {
+            "title": "英語会話",
+            "description": "日常英会話を習得するためのコースです。",
+            "start_date": "2024-02-01",
+            "end_date": "2024-04-30"
+        }
+    },
+    {
+        "model": "educationapp.course",
+        "pk": 3,
+        "fields": {
+            "title": "データサイエンス入門",
+            "description": "データ分析と基礎的な統計学を学ぶコースです。",
+            "start_date": "2024-03-01",
+            "end_date": "2024-06-30"
+        }
+    }
+]

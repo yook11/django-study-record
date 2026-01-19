@@ -7,7 +7,7 @@ def get_all_student(request):
     #'educationapp/student_list.html'というテンプレートを使用して、studentsをcontextとして渡す
     return render(request, 'educationapp/student_list.html', {'students': students})
 
-def get_sutudent_by_id(request, id):
+def get_student_by_id(request, id):
     student = get_object_or_404(Student, id=id)
     return render(request, 'educationapp/student_detail.html', {'student': student})
 
@@ -34,3 +34,10 @@ def filter_students(request):
             pass
 
     return render(request, 'educationapp/student_list.html', {'students': students})
+
+
+def student_with_profile_list(request):
+    students_with_profiles = Student.objects.select_related('profile')
+
+    return render(request, 'educationapp/student_with_profile_list.html', 
+                {'students_with_profile': students_with_profiles})

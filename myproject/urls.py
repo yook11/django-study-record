@@ -31,5 +31,5 @@ urlpatterns = [
     path('menu/', views.MenuPageView.as_view(), name='menu'),
     path('exe03/', include('todoapp.urls')),
     path('login/', auth_views.LoginView.as_view(template_name='todoapp/login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('logout/', views.custom_logout_view, name='logout'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

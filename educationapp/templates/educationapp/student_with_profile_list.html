@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>生徒とプロフィール一覧</title>
+</head>
+<body>
+    <h1>生徒とプロフィール一覧</h1>
+    <hr>
+    <strong>生徒とプロフィールの結合 (1対1) </strong>
+    <table border="1">
+        <tr>
+            <th>名前</th>
+            <th>年齢</th>
+            <th>入学日</th>
+            <th>住所</th>
+            <th>電話番号</th>
+            <th>紹介文</th>
+        </tr>
+        {% for student in students_with_profiles %}
+        <tr>
+            <td>{{ student.name }}</td>
+            <td>{{ student.age }}</td>
+            <td>{{ student.enrollment_date }}</td>
+            <td>{{ student.profile.address }}</td>
+            <td>{{ student.profile.phone_number }}</td>
+            <td>{{ student.profile.bio }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">該当するデータがありません。</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <a href="{% url 'orm_index' %}">Django ORM 操作一覧へ</a>
+</body>
+</html>

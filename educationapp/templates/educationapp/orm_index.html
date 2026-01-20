@@ -241,33 +241,17 @@
                     </a>
                 </li>
 
-                {% comment %}
-                <li class="orm-item disabled">
-                    <a href="#" onclick="return false;">
-                        <div class="orm-icon">🔗</div>
+                <li class="orm-item">
+                    <a href="{% url 'students_by_class' %}">
+                        <div class="orm-icon">🏫</div>
                         <div class="orm-content">
-                            <div class="orm-title">
-                                1対1: 結合
-                                <span class="coming-soon">Coming Soon</span>
-                            </div>
-                            <div class="orm-description">OneToOneField - Profile情報の結合</div>
-                        </div>
-                    </a>
-                </li>
-
-                <li class="orm-item disabled">
-                    <a href="#" onclick="return false;">
-                        <div class="orm-icon">📊</div>
-                        <div class="orm-content">
-                            <div class="orm-title">
-                                1対多: 結合
-                                <span class="coming-soon">Coming Soon</span>
-                            </div>
+                            <div class="orm-title">クラスと生徒の結合</div>
                             <div class="orm-description">ForeignKey - クラスと生徒の関係</div>
                         </div>
                     </a>
                 </li>
 
+                {% comment %}
                 <li class="orm-item disabled">
                     <a href="#" onclick="return false;">
                         <div class="orm-icon">🔀</div>

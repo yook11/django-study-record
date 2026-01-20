@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Student
+from .models import Student,Profile,SchoolClass
 
 def get_all_student(request):
     #studentテーブルの全てのデータを取得
@@ -40,4 +40,22 @@ def student_with_profile_list(request):
     students_with_profiles = Student.objects.select_related('profile')
 
     return render(request, 'educationapp/student_with_profile_list.html', 
-                {'students_with_profile': students_with_profiles})
+                {'students_with_profiles': students_with_profiles})
+
+def class_students(request):
+    classes = SchoolClass.objects.all()
+
+    selected_class_id = request.GET.get('class_id')
+
+    if selected_class_id:
+        selected_class = SchoolClass.objects.get(id=selected_class_id)
+        students = selected_class.enrolled_students.all()
+    else:
+        selected_class = None
+        students = None
+    
+    return render(request, 'educationapp/class_students.html', {
+        'classes': classes,
+        'selected_class': selected_class,
+        'students': students,
+    })

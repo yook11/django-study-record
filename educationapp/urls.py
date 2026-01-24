@@ -9,4 +9,5 @@ urlpatterns = [
     path('students/', views.filter_students, name='students_where'),
     path('students_with_profiles/', views.student_with_profile_list, name='students_join_profile'),
     path('class_students/', views.class_students, name='students_by_class'),
+    path('students_with_courses/', views.students_with_courses, name='students_join_table_courses'),
 ]

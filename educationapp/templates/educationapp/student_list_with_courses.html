@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>生徒一覧</title>
+</head>
+<body>
+    <h1>生徒一覧: 受講コース</h1>
+    <hr>
+    <table border="1">
+        <tr>
+            <th>名前</th>
+            <th>年齢</th>
+            <th>入学日</th>
+            <th>受講コース</th>
+        </tr>
+        {% for student in students %}
+        <tr>
+            <td>{{ student.name }}</td>
+            <td>{{ student.age }}</td>
+            <td>{{ student.enrollment_date }}</td>
+            <td>
+                {% if student.courses.all %}
+                    <ul>
+                        {% for course in student.courses.all %}
+                        <li>{{ course.title }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>受講なし</p>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <a href="{% url 'orm_index' %}">Django ORM 操作一覧へ</a>
+</body>
+</html>

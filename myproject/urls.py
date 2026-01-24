@@ -32,4 +32,5 @@ urlpatterns = [
     path('exe03/', include('todoapp.urls')),
     path('login/', auth_views.LoginView.as_view(template_name='todoapp/login.html'), name='login'),
     path('logout/', views.custom_logout_view, name='logout'),
+    path('exe05/', include('appendixapp.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

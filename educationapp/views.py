@@ -59,3 +59,8 @@ def class_students(request):
         'selected_class': selected_class,
         'students': students,
     })
+
+def students_with_courses(request):
+    students = Student.objects.prefetch_related('courses')
+
+    return render(request, "educationapp/student_list_with_courses.html", {"students": students})

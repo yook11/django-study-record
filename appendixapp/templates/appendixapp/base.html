@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}親テンプレート{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1>★★★共通ヘッダー★★★</h1>
+        <hr>
+    </header>
+
+    <main>
+        {% block content %}
+            ここに子テンプレートの内容が表示される
+        {% endblock %}
+    </main>
+
+    <footer>
+        <hr>
+        <h1>◎◎◎共通フッター◎◎◎</h1>
+        <a href="{% url 'extends_index' %}">
+            「テンプレート継承」のIndexページへ
+        </a>
+    </footer>
+</body>
+</html>

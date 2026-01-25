@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>サンプル一覧</title>
+</head>
+<body>
+    <h1>サンプル一覧</h1>
+    <ul>
+    {% for sample in samples %}
+        <li>
+            <a href="{% url 'sample_detail' sample.id %}">
+                {{ sample.name }}
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+
+    <a href="{% url 'sample_create' %}">新規作成</a>
+</body>
+</html>

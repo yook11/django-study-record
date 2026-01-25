@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ sample.name }}の詳細</title>
+</head>
+<body>
+    <h1>{{ sample.name }}の詳細</h1>
+
+    <p>ID: {{ sample.id }}</p>
+    <p>名前: {{ sample.name }}</p>
+
+    <a href="{% url 'sample_list' %}">一覧に戻る</a>
+</body>
+</html>

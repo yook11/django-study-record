@@ -38,6 +38,7 @@ class TodoBaseView(LoginRequiredMixin, SuccessMessageMixin):
 class TodoListView(TodoBaseView, ListView): # 一覧もログイン必須にする場合
     template_name = 'todoapp/todo_list.html'
     context_object_name = 'todos'
+    paginate_by = 2
 
 class TodoDetailView(TodoBaseView, DetailView):
     template_name = 'todoapp/todo_detail.html'

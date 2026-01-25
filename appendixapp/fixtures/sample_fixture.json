@@ -1,0 +1,37 @@
+[
+    {
+        "model": "appendixapp.sample",
+        "pk": 1,
+        "fields": {
+            "name": "サンプルA"
+        }
+    },
+    {
+        "model": "appendixapp.sample",
+        "pk": 2,
+        "fields": {
+            "name": "サンプルB"
+        }
+    },
+    {
+        "model": "appendixapp.sample",
+        "pk": 3,
+        "fields": {
+            "name": "サンプルC"
+        }
+    },
+    {
+        "model": "appendixapp.sample",
+        "pk": 4,
+        "fields": {
+            "name": "サンプルD"
+        }
+    },
+    {
+        "model": "appendixapp.sample",
+        "pk": 5,
+        "fields": {
+            "name": "サンプルE"
+        }
+    }
+]

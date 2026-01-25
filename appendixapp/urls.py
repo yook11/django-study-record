@@ -9,4 +9,5 @@ urlpatterns = [
     path('samples/', views.sample_list, name="sample_list"),
     path('samples/<int:id>/', views.sample_detail, name="sample_detail"),
     path('samples/create/', views.sample_create, name="sample_create"),
+    path('paginator/', views.samples_paginator, name="samples_paginator"),
 ]

@@ -1,0 +1,39 @@
+{% extends 'appendixapp/base.html' %}
+
+{% block title %}pagination{% endblock %}
+
+{% block content %}
+    <h2>ページネーションのサンプル</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>名前</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sample in page_obj %}
+                <tr>
+                    <td>{{ sample.id }}</td>
+                    <td>{{ sample.name }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <hr>
+    <div>
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">
+                前のページ
+            </a>
+        {% endif %}
+
+        <span>現在のページ: {{ page_obj.number }}</span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">
+                次のページ
+            </a>
+        {% endif %}
+    </div>
+    {% endblock %}

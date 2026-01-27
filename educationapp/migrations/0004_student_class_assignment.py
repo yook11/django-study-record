@@ -5,15 +5,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('educationapp', '0003_schoolclass'),
+        ("educationapp", "0003_schoolclass"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='student',
-            name='class_assignment',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='students', to='educationapp.schoolclass'),
+            model_name="student",
+            name="class_assignment",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="students",
+                to="educationapp.schoolclass",
+            ),
         ),
     ]

@@ -1,6 +1,7 @@
 # HttpResponseクラスをインポート
 from django.http import HttpResponse
 
+
 # ------------------------------------------------------------------
 # ビュー関数を定義
 # "ハロー、Django!"というテキストを含むHTTPレスポンスを返す
@@ -16,7 +17,7 @@ def show_hello(request):
         <title>Hello Django - 書道</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=Zen+Antique&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=Zen+Antique&display=swap" rel="stylesheet"> # noqa: E501
         <style>
             * {
                 margin: 0;

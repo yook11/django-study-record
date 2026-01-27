@@ -5,30 +5,40 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('educationapp', '0004_student_class_assignment'),
+        ("educationapp", "0004_student_class_assignment"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Course',
+            name="Course",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=100)),
-                ('description', models.TextField(blank=True, null=True)),
-                ('strat_date', models.DateField()),
-                ('end_date', models.DateField()),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("title", models.CharField(max_length=100)),
+                ("description", models.TextField(blank=True, null=True)),
+                ("strat_date", models.DateField()),
+                ("end_date", models.DateField()),
             ],
         ),
         migrations.AlterField(
-            model_name='student',
-            name='class_assignment',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='enrolled_students', to='educationapp.schoolclass'),
+            model_name="student",
+            name="class_assignment",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="enrolled_students",
+                to="educationapp.schoolclass",
+            ),
         ),
         migrations.AddField(
-            model_name='student',
-            name='courses',
-            field=models.ManyToManyField(blank=True, related_name='students', to='educationapp.course'),
+            model_name="student",
+            name="courses",
+            field=models.ManyToManyField(
+                blank=True, related_name="students", to="educationapp.course"
+            ),
         ),
     ]

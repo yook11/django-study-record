@@ -14,23 +14,24 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.shortcuts import redirect
-from django.contrib import admin
-from django.urls import path, include
+
 from django.conf import settings
 from django.conf.urls.static import static
-from . import views
+from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from django.shortcuts import redirect
+from django.urls import include, path
 
+from . import views
 
 urlpatterns = [
-    path('', lambda request: redirect('menu'), name='home'),
-    path('admin/', admin.site.urls),
-    path('exe01/', include('helloapp.urls')),
-    path('exe02/', include('bookapp.urls')),
-    path('menu/', views.MenuPageView.as_view(), name='menu'),
-    path('exe03/', include('todoapp.urls')),
-    path('login/', auth_views.LoginView.as_view(template_name='todoapp/login.html'), name='login'),
-    path('logout/', views.custom_logout_view, name='logout'),
-    path('exe05/', include('appendixapp.urls')),
+    path("", lambda request: redirect("menu"), name="home"),
+    path("admin/", admin.site.urls),
+    path("exe01/", include("helloapp.urls")),
+    path("exe02/", include("bookapp.urls")),
+    path("menu/", views.MenuPageView.as_view(), name="menu"),
+    path("exe03/", include("todoapp.urls")),
+    path("login/", auth_views.LoginView.as_view(template_name="todoapp/login.html"), name="login"),
+    path("logout/", views.custom_logout_view, name="logout"),
+    path("exe05/", include("appendixapp.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

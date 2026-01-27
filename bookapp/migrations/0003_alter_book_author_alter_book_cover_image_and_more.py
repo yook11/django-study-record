@@ -4,30 +4,31 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('bookapp', '0002_book_cover_image'),
+        ("bookapp", "0002_book_cover_image"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='book',
-            name='author',
-            field=models.CharField(max_length=10, verbose_name='著者'),
+            model_name="book",
+            name="author",
+            field=models.CharField(max_length=10, verbose_name="著者"),
         ),
         migrations.AlterField(
-            model_name='book',
-            name='cover_image',
-            field=models.ImageField(blank=True, null=True, upload_to='book_covers', verbose_name='表紙画像'),
+            model_name="book",
+            name="cover_image",
+            field=models.ImageField(
+                blank=True, null=True, upload_to="book_covers", verbose_name="表紙画像"
+            ),
         ),
         migrations.AlterField(
-            model_name='book',
-            name='publication_date',
-            field=models.DateField(verbose_name='出版日'),
+            model_name="book",
+            name="publication_date",
+            field=models.DateField(verbose_name="出版日"),
         ),
         migrations.AlterField(
-            model_name='book',
-            name='title',
-            field=models.CharField(max_length=20, verbose_name='タイトル'),
+            model_name="book",
+            name="title",
+            field=models.CharField(max_length=20, verbose_name="タイトル"),
         ),
     ]

@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class SchoolClass(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
@@ -20,14 +21,14 @@ class Student(models.Model):
     class_assignment = models.ForeignKey(
         SchoolClass,
         on_delete=models.CASCADE,
-        related_name='enrolled_students',
-        )
-    
+        related_name="enrolled_students",
+    )
+
     courses = models.ManyToManyField(
         Course,
-        related_name='students',
+        related_name="students",
         blank=True,
-        )
+    )
 
 
 class Profile(models.Model):
@@ -35,5 +36,3 @@ class Profile(models.Model):
     phone_number = models.CharField(max_length=20)
     address = models.TextField(max_length=255)
     bio = models.TextField(null=True, blank=True)
-
-    

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "appendixapp",
     "rest_framework",
     "corsheaders",
+    "items",
 ]
 
 MIDDLEWARE = [

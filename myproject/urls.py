@@ -21,8 +21,13 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.shortcuts import redirect
 from django.urls import include, path
+from ninja import NinjaAPI
+from items.api import router as items_router
 
 from . import views
+
+api = NinjaAPI()
+api.add_router("/items", items_router)
 
 urlpatterns = [
     path("", lambda request: redirect("menu"), name="home"),
@@ -34,4 +39,5 @@ urlpatterns = [
     path("login/", auth_views.LoginView.as_view(template_name="todoapp/login.html"), name="login"),
     path("logout/", views.custom_logout_view, name="logout"),
     path("exe05/", include("appendixapp.urls")),
+    path("api/", api.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

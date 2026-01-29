@@ -1,11 +1,10 @@
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render
-from rest_framework import viewsets
 
 from .models import Sample
-from .pagination import CustomPagination
-from .serializers import SampleSerializer
+#from .pagination import CustomPagination
+#from .serializers import SampleSerializer
 
 
 def sample_list(request):
@@ -27,15 +26,14 @@ def sample_create(request):
     return render(request, "appendixapp/create.html")
 
 
-def samples_paginator(request):
-    samples = Sample.objects.all()
-    paginator = Paginator(samples, 2)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-    return render(request, "appendixapp/sample_list.html", {"page_obj": page_obj})
+# def samples_paginator(request):
+#     samples = Sample.objects.all()
+#     paginator = Paginator(samples, 2)
+#     page_number = request.GET.get("page")
+#     page_obj = paginator.get_page(page_number)
+#     return render(request, "appendixapp/sample_list.html", {"page_obj": page_obj})
 
 
-class SampleViewSet(viewsets.ModelViewSet):
-    queryset = Sample.objects.all()
-    serializer_class = SampleSerializer
-    pagination_class = CustomPagination
+# class SampleViewSet(viewsets.ModelViewSet):
+#     serializer_class = SampleSerializer
+#     pagination_class = CustomPagination

@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     "todoapp",
     "educationapp",
     "appendixapp",
-    "rest_framework",
+    "ninja",
     "corsheaders",
     "items",
 ]
@@ -143,9 +143,6 @@ LOGIN_REDIRECT_URL = "todo_list"
 
 LOGOUT_REDIRECT_URL = "login"
 
-REST_FRAMEWORK = {
-    "DEFAULT_PAGINATION_CLASS": "appendixapp.pagination.CustomPagination",
-}
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django ORM 操作一覧</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            color: #667eea;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+
+        .orm-list {
+            list-style: none;
+            display: grid;
+            gap: 15px;
+        }
+
+        .orm-item {
+            background: #f8f9fa;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .orm-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .orm-item a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .orm-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .orm-content {
+            flex: 1;
+        }
+
+        .orm-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .orm-description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .orm-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .orm-item.disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .coming-soon {
+            display: inline-block;
+            background: #ffd700;
+            color: #333;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 15px 40px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.3);
+            margin: 0 auto;
+            display: block;
+            width: fit-content;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,255,255,0.5);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 30px 20px;
+            }
+
+            .orm-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            .orm-title {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗄️ Django ORM 操作一覧</h1>
+            <p>Object-Relational Mapping Learning Center</p>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                📚 利用可能な操作
+            </div>
+            <ul class="orm-list">
+                <li class="orm-item">
+                    <a href="{% url 'student_list' %}">
+                        <div class="orm-icon">👥</div>
+                        <div class="orm-content">
+                            <div class="orm-title">全ての生徒データを取得</div>
+                            <div class="orm-description">Student.objects.all() - 基本的なクエリ操作</div>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="orm-item">
+                    <a href="{% url 'students_where' %}">
+                        <div class="orm-icon">🔍</div>
+                        <div class="orm-content">
+                            <div class="orm-title">フィルター検索</div>
+                            <div class="orm-description">filter() - 条件に基づいたデータ検索</div>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="orm-item">
+                    <a href="{% url 'students_join_profile' %}">
+                        <div class="orm-icon">🔗</div>
+                        <div class="orm-content">
+                            <div class="orm-title">生徒とプロフィールの結合</div>
+                            <div class="orm-description">select_related() - 生徒とプロフィールの結合</div>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="orm-item">
+                    <a href="{% url 'students_by_class' %}">
+                        <div class="orm-icon">🏫</div>
+                        <div class="orm-content">
+                            <div class="orm-title">クラスと生徒の結合</div>
+                            <div class="orm-description">ForeignKey - クラスと生徒の関係</div>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="orm-item">
+                    <a href="{% url 'students_join_table_courses' %}">
+                        <div class="orm-icon">🔀</div>
+                        <div class="orm-content">
+                            <div class="orm-title">
+                                多対多: 中間テーブル
+                            </div>
+                            <div class="orm-description">ManyToManyField - 生徒とコースの関係</div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <a href="{% url 'menu' %}" class="back-link">
+            ⬅️ メニューに戻る
+        </a>
+    </div>
+</body>
+</html>

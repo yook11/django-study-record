@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+*.egg-info/
+.eggs/
+
+# Django
+db.sqlite3
+media/
+*.log
+staticfiles/
+
+# Node
+node_modules/
+dist/
+.pnpm-store/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+*.bak
+*.lock.bak
+
+# Cache
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+
+# Docker (データをフォルダに保存している場合)
+postgres_data/
+mysql_data/
+
+# Testing
+coverage/
+htmlcov/

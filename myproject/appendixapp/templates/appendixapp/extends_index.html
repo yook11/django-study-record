@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>テンプレートの継承 - Index</title>
+</head>
+<body>
+    <h1>「テンプレートの継承」学習ページ</h1>
+    <ul>
+        <li>
+            <a href="{% url 'extends_one' %}">
+                テンプレート1を表示
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'extends_two' %}">
+                テンプレート2を表示
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'samples_paginator' %}">ページネーションのサンプル</a>
+        </li>
+    </ul>
+    <hr>
+    <!-- メニューに戻るリンク -->
+    <a href="{% url 'menu' %}">メニューに戻る</a>
+</body>
+</html>

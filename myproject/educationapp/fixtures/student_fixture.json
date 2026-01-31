@@ -1,0 +1,47 @@
+[
+    {
+        "model": "educationapp.student",
+        "pk": 1,
+        "fields": {
+            "name": "山田 太郎",
+            "age": 20,
+            "enrollment_date": "2023-04-01"
+        }
+    },
+    {
+        "model": "educationapp.student",
+        "pk": 2,
+        "fields": {
+            "name": "佐藤 花子",
+            "age": 21,
+            "enrollment_date": "2023-04-02"
+        }
+    },
+    {
+        "model": "educationapp.student",
+        "pk": 3,
+        "fields": {
+            "name": "鈴木 一郎",
+            "age": 19,
+            "enrollment_date": "2023-04-03"
+        }
+    },
+    {
+        "model": "educationapp.student",
+        "pk": 4,
+        "fields": {
+            "name": "田中 美咲",
+            "age": 22,
+            "enrollment_date": "2023-04-04"
+        }
+    },
+    {
+        "model": "educationapp.student",
+        "pk": 5,
+        "fields": {
+            "name": "高橋 次郎",
+            "age": 20,
+            "enrollment_date": "2023-04-05"
+        }
+    }
+]

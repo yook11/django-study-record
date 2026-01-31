@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>一覧</title>
+    {% load static %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'todoapp/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="{% static 'todoapp/messages.js' %}"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>すること一覧</h1>
+        <div class="user-info" style="text-align: right; margin-bottom: 20px;">
+    {% if user.is_authenticated %}
+        <span>こんにちは、<strong>{{ user.username }}</strong> さん</span>
+        <form action="{% url 'logout' %}" method="post" style="display: inline; margin-left: 10px;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-secondary" style="padding: 5px 15px; font-size: 0.8rem;">ログアウト</button>
+        </form>
+    {% else %}
+        <a href="{% url 'login' %}" class="btn btn-primary">ログイン</a>
+    {% endif %}
+</div>
+        <hr>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message alert alert-{{ message.tags }}">
+                        {{ message }}
+                        <span class="close-btn"><i class="fa-solid fa-xmark"></i></span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="action-buttons">
+            <a href="{% url 'todo_create' %}" class="btn btn-primary">新規登録</a>
+            <a href="{% url 'todo_analytics' %}" class="btn btn-info">タスク分析</a>
+            <a href="{% url 'menu' %}" class="btn btn-secondary">メニューへ</a>
+        </div>
+        <ul class="todo-list">
+            {% for todo in todos %}
+                <li class="todo-item {% if todo.completed %}completed{% else %}not-completed{% endif %}">
+                    
+                    <div class="todo-title">{{ todo.title }}</div>
+                    <div class="todo-memo">{{ todo.memo }}</div>
+
+                    {% if todo.completed %}
+                        <span class="todo-status completed">完了</span>
+                    {% else %}
+                        <span class="todo-status not-completed">未完了</span>
+                    {% endif %}
+
+                    <div class="todo-date">
+                        作成日: {{ todo.created|date:"Y年m月d日 H:i:s" }}
+                    </div>
+                    <div class="todo-date">
+                        更新日: {{ todo.updated|date:"Y年m月d日 H:i:s" }}
+                    </div>
+                    <div class ="todo-actions">
+                        <a href="{% url 'todo_detail' todo.id %}" class="btn btn-info">詳細</a>
+                        <a href="{% url 'todo_update' todo.id %}" class="btn btn-warning">更新</a>
+                        <a href="{% url 'todo_delete' todo.id %}" class="btn btn-danger">削除</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <!-- ページネーションのリンク -->
+        <div class="pagination">
+            <span>
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">最初のページ</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">前のページ</a>
+                {% endif %}
+                <span>
+                    現在のページ: {{ page_obj.number }}
+                    /
+                    {{ page_obj.paginator.num_pages }}
+                </span>
+            </span>
+            <span>
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">
+                        次のページ
+                    </a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">
+                        最後のページ
+                    </a>
+                {% endif %}
+            </span>
+    </div>
+</body>
+</html>

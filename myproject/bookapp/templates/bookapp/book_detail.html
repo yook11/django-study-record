@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ book.title }} - 蔵書詳細</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:wght@300;400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Crimson Text', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #2c1810 0%, #1a0f08 100%);
+            color: #d4c5b0;
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 40%, rgba(139, 90, 43, 0.15) 0%, transparent 60%),
+                radial-gradient(circle at 70% 70%, rgba(101, 67, 33, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .book-detail-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: rgba(62, 39, 35, 0.6);
+            color: #d4c5b0;
+            text-decoration: none;
+            border-radius: 6px;
+            border: 1px solid rgba(212, 197, 176, 0.2);
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            font-size: 1em;
+        }
+        
+        .back-btn:hover {
+            background: rgba(139, 90, 43, 0.4);
+            border-color: #d4a574;
+            transform: translateX(-5px);
+        }
+        
+        .book-showcase {
+            background: linear-gradient(135deg, rgba(62, 39, 35, 0.7), rgba(42, 24, 16, 0.7));
+            border: 2px solid rgba(212, 197, 176, 0.25);
+            border-radius: 15px;
+            padding: 50px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .book-showcase::before {
+            content: '📖';
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            font-size: 15em;
+            opacity: 0.05;
+            transform: rotate(-15deg);
+        }
+        
+        .book-content {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 50px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .book-cover-section {
+            position: relative;
+        }
+        
+        .book-cover-frame {
+            background: linear-gradient(135deg, rgba(101, 67, 33, 0.4), rgba(62, 39, 35, 0.4));
+            border: 3px solid #8b5a2b;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.5),
+                inset 0 2px 5px rgba(212, 165, 116, 0.1);
+        }
+        
+        .book-cover-image {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            border-radius: 5px;
+            display: block;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+        
+        .no-cover {
+            width: 100%;
+            height: 450px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(62, 39, 35, 0.8), rgba(42, 24, 16, 0.8));
+            border: 2px dashed rgba(212, 197, 176, 0.3);
+            border-radius: 5px;
+            color: #8b7355;
+            font-style: italic;
+        }
+        
+        .no-cover-icon {
+            font-size: 5em;
+            margin-bottom: 15px;
+            opacity: 0.4;
+        }
+        
+        .book-info-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .book-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3em;
+            color: #e8d5bd;
+            margin-bottom: 30px;
+            line-height: 1.3;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 1px;
+        }
+        
+        .book-metadata {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .metadata-item {
+            padding: 20px;
+            background: rgba(62, 39, 35, 0.5);
+            border-left: 4px solid #d4a574;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .metadata-item:hover {
+            background: rgba(101, 67, 33, 0.4);
+            border-left-width: 6px;
+            transform: translateX(5px);
+        }
+        
+        .metadata-label {
+            font-size: 0.9em;
+            color: #b8a890;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .metadata-value {
+            font-size: 1.4em;
+            color: #e8d5bd;
+            font-family: 'Cormorant Garamond', serif;
+        }
+        
+        .action-buttons {
+            margin-top: 40px;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 15px 25px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            border: 2px solid;
+            font-family: 'Crimson Text', serif;
+            letter-spacing: 1px;
+        }
+        
+        .btn-edit {
+            background: linear-gradient(135deg, #8b5a2b, #654321);
+            color: #f5e6d3;
+            border-color: #d4a574;
+            box-shadow: 0 4px 15px rgba(139, 90, 43, 0.3);
+        }
+        
+        .btn-edit:hover {
+            background: linear-gradient(135deg, #a0692f, #7a5228);
+            box-shadow: 0 6px 20px rgba(139, 90, 43, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .btn-delete {
+            background: linear-gradient(135deg, #8b4513, #6b3410);
+            color: #f5e6d3;
+            border-color: #cd5c5c;
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+        }
+        
+        .btn-delete:hover {
+            background: linear-gradient(135deg, #a0512f, #7a3d1a);
+            box-shadow: 0 6px 20px rgba(139, 69, 19, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 968px) {
+            .book-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .book-showcase {
+                padding: 30px;
+            }
+            
+            .book-title {
+                font-size: 2.2em;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="book-detail-container">
+        <a href="{% url 'book_list' %}" class="back-btn">
+            ← 蔵書目録へ戻る
+        </a>
+
+        <div class="book-showcase">
+            <div class="book-content">
+                <div class="book-cover-section">
+                    <div class="book-cover-frame">
+                        {% if book.cover_image %}
+                            <img src="{{ book.cover_image.url }}" 
+                                 alt="{{ book.title }}" 
+                                 class="book-cover-image">
+                        {% else %}
+                            <div class="no-cover">
+                                <div class="no-cover-icon">📕</div>
+                                <div>表紙画像未設定</div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="book-info-section">
+                    <h1 class="book-title">{{ book.title }}</h1>
+
+                    <div class="book-metadata">
+                        <div class="metadata-item">
+                            <div class="metadata-label">✍️ 著者</div>
+                            <div class="metadata-value">{{ book.author }}</div>
+                        </div>
+
+                        <div class="metadata-item">
+                            <div class="metadata-label">📅 出版日</div>
+                            <div class="metadata-value">{{ book.publication_date|date:"Y年n月j日" }}</div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <a href="{% url 'book_update' book.pk %}" class="btn btn-edit">
+                            ✏️ 編集する
+                        </a>
+                        <a href="{% url 'book_delete' book.pk %}" class="btn btn-delete">
+                            🗑️ 削除する
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

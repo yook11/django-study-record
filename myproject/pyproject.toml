@@ -1,0 +1,35 @@
+[project]
+name = "myproject"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "dj-database-url>=3.1.0",
+    "django>=6.0.1",
+    "django-cors-headers>=4.9.0",
+    "django-ninja>=1.5.3",
+    "django-pandas>=0.6.7",
+    "matplotlib>=3.10.8",
+    "pandas>=3.0.0",
+    "pillow>=12.1.0",
+    "psycopg[binary]>=3.3.2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+    "ruff>=0.14.14",
+]
+
+[tool.ruff]
+# 1行の長さ（Djangoのデフォルトに合わせるなら88、少し広めなら100〜120）
+line-length = 100
+
+[tool.ruff.lint]
+# 適用するルールの選択 (E: pycodestyle, F: Pyflakes, I: isort)
+select = ["E", "F", "I"]
+
+[tool.ruff.lint.isort]
+# Djangoのプロジェクト名を指定して、インポート順を綺麗にする
+known-first-party = ["myproject"]

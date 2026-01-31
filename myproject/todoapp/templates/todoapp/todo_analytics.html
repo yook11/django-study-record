@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>タスク分析</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'todoapp/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>タスク分析ダッシュボード</h1>
+        <hr>
+        <div class="analytics-summary">
+            <h2>タスク概要</h2>
+            <div class="stats-container">
+                
+                <div class="stat-box">
+                    <h3>合計タスク数</h3>
+                    <div class="stat-value">{{ stats.total }}</div>
+                </div>
+
+                <div class="stat-box">
+                    <h3>完了タスク</h3>
+                    <div class="stat-value">{{ stats.completed }}</div>
+                </div>
+
+                <div class="stat-box">
+                    <h3>未完了タスク</h3>
+                    <div class="stat-value">{{ stats.not_completed }}</div>
+                </div>
+
+                <div class="stat-box">
+                    <h3>完了率</h3>
+                    <div class="stat-value">{{ stats.completion_rate }}%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="analytics-charts">
+            <h2>グラフ分析</h2>
+            <img src="data:image/png;base64,{{ graph }}" alt="タスク分析グラフ">
+        </div>
+
+        <div class="action-buttons">
+            <a href="{% url 'todo_list' %}" class="btn btn-secondary">タスク一覧に戻る</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- ドキュメントの文字エンコーディングを設定 -->
+    <meta charset="UTF-8">
+    <!-- 画面のタイトルを設定 -->
+    <title>メッセージの表示</title>
+    <!-- 画面のスタイルを定義 -->
+    <style>
+        /* メッセージリストのスタイルを設定 */
+        .message {
+            list-style-type: none; /* リストのマーカーを非表示に */
+            padding: 0; /*パディングをリセット */
+        }
+        /*リスト項目のスタイルを設定 */
+        .message li {
+            margin: 5px 0; /* 各リストの項目上下に5pxのマージンを設定　*/
+            padding: 10px; /*　各リストの項目に10pxのパディングを設定　*/
+            border-radius: 3px; /* 角を3pxで丸める */
+        }
+        /*デバッグメッセージの背景色を設定 */
+        .debug {
+            background-color: lightgray;
+        }
+        /* 情報メッセージの背景色を設定 */
+        .info {
+            background-color: lightblue;
+        }
+        /* 成功メッセージの背景色を設定 */
+        .success {
+            background-color: lightgreen;
+        }
+        /* 警告メッセージ */
+        .warning {
+            background-color: yellow;
+        }
+        /* エラーメッセージ */
+        .error {
+            background-color: lightcoral;
+        }
+    </style>             
+</head>
+<body>
+    <!-- 画面のヘッダー -->
+    <h1>メッセージの表示</h1>
+    <!-- メッセージが存在する場合に表示するブロック-->
+    {% if messages %}
+        <!-- メッセージリストを表示 -->
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags}}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

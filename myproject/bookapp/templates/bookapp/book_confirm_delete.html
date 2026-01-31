@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ book.title }} - 削除確認</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:wght@300;400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Crimson Text', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #2c1810 0%, #1a0f08 100%);
+            color: #d4c5b0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 40%, rgba(139, 69, 19, 0.2) 0%, transparent 55%),
+                radial-gradient(circle at 70% 70%, rgba(101, 67, 33, 0.15) 0%, transparent 55%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .delete-container {
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .delete-panel {
+            background: linear-gradient(135deg, rgba(62, 39, 35, 0.8), rgba(42, 24, 16, 0.8));
+            border: 2px solid rgba(205, 92, 92, 0.4);
+            border-radius: 15px;
+            padding: 50px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .delete-panel::before {
+            content: '⚠️';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            font-size: 18em;
+            opacity: 0.05;
+            transform: rotate(15deg);
+        }
+        
+        .warning-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+        
+        .delete-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2em;
+            color: #e8b4a0;
+            margin-bottom: 15px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .book-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2em;
+            color: #d4a574;
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(101, 67, 33, 0.3);
+            border-radius: 8px;
+            border-left: 4px solid #cd5c5c;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        
+        .warning-message {
+            font-size: 1.15em;
+            color: #d4c5b0;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            font-style: italic;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 16px 30px;
+            text-align: center;
+            text-decoration: none;
+            border: 2px solid;
+            border-radius: 8px;
+            font-size: 1.15em;
+            font-family: 'Crimson Text', serif;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-delete {
+            background: linear-gradient(135deg, #8b4513, #6b3410);
+            color: #f5e6d3;
+            border-color: #cd5c5c;
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.4);
+        }
+        
+        .btn-delete:hover {
+            background: linear-gradient(135deg, #a0512f, #7a3d1a);
+            box-shadow: 0 6px 25px rgba(139, 69, 19, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        .btn-cancel {
+            background: linear-gradient(135deg, #8b5a2b, #654321);
+            color: #f5e6d3;
+            border-color: #d4a574;
+            box-shadow: 0 4px 15px rgba(139, 90, 43, 0.3);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-cancel:hover {
+            background: linear-gradient(135deg, #a0692f, #7a5228);
+            box-shadow: 0 6px 20px rgba(139, 90, 43, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .delete-form {
+            width: 100%;
+        }
+        
+        @media (max-width: 768px) {
+            .delete-panel {
+                padding: 30px;
+            }
+            
+            .delete-title {
+                font-size: 1.5em;
+            }
+            
+            .book-title {
+                font-size: 1.7em;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="delete-container">
+        <div class="delete-panel">
+            <div class="warning-icon">🗑️</div>
+            <h1 class="delete-title">この書籍を削除しますか？</h1>
+            
+            <div class="book-title">
+                「{{ book.title }}」
+            </div>
+            
+            <p class="warning-message">
+                ⚠️ この操作は取り消すことができません。<br>
+                削除された書籍は二度と復元できません。
+            </p>
+            
+            <div class="action-buttons">
+                <form method="post" class="delete-form">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-delete">
+                        🗑️ 削除を実行
+                    </button>
+                </form>
+                <a href="{% url 'book_list' %}" class="btn btn-cancel">
+                    ← キャンセル
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

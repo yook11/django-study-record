@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - 蔵書登録</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:wght@300;400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Crimson Text', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #2c1810 0%, #1a0f08 100%);
+            color: #d4c5b0;
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 25% 45%, rgba(139, 90, 43, 0.12) 0%, transparent 55%),
+                radial-gradient(circle at 75% 65%, rgba(101, 67, 33, 0.12) 0%, transparent 55%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(101, 67, 33, 0.3), rgba(62, 39, 35, 0.3));
+            border: 2px solid rgba(212, 197, 176, 0.2);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        
+        .form-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5em;
+            color: #d4a574;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 2px;
+        }
+        
+        .form-subtitle {
+            font-size: 1em;
+            color: #b8a890;
+            font-style: italic;
+        }
+        
+        .form-panel {
+            background: linear-gradient(135deg, rgba(62, 39, 35, 0.7), rgba(42, 24, 16, 0.7));
+            border: 2px solid rgba(212, 197, 176, 0.25);
+            border-radius: 12px;
+            padding: 45px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
+        }
+        
+        .error-list {
+            background: rgba(139, 69, 19, 0.4);
+            border: 1px solid rgba(205, 92, 92, 0.6);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            list-style: none;
+        }
+        
+        .error-list li {
+            color: #e8b4a0;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(205, 92, 92, 0.3);
+        }
+        
+        .error-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .error-list::before {
+            content: '⚠️ ';
+            font-size: 1.2em;
+        }
+        
+        .form-field {
+            margin-bottom: 30px;
+        }
+        
+        .form-field label {
+            display: block;
+            font-size: 1.1em;
+            color: #d4a574;
+            margin-bottom: 10px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .form-field input[type="text"],
+        .form-field input[type="date"],
+        .form-field input[type="file"],
+        .form-field textarea,
+        .form-field select {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(42, 24, 16, 0.6);
+            border: 2px solid rgba(212, 197, 176, 0.3);
+            border-radius: 8px;
+            color: #e8d5bd;
+            font-size: 1.05em;
+            font-family: 'Crimson Text', serif;
+            transition: all 0.3s ease;
+        }
+        
+        .form-field input:focus,
+        .form-field textarea:focus,
+        .form-field select:focus {
+            outline: none;
+            border-color: #d4a574;
+            background: rgba(42, 24, 16, 0.8);
+            box-shadow: 0 0 15px rgba(212, 165, 116, 0.2);
+        }
+        
+        .form-field input[type="file"] {
+            padding: 12px;
+            cursor: pointer;
+        }
+        
+        .form-field input[type="file"]::file-selector-button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #8b5a2b, #654321);
+            color: #f5e6d3;
+            border: 1px solid #d4a574;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-field input[type="file"]::file-selector-button:hover {
+            background: linear-gradient(135deg, #a0692f, #7a5228);
+        }
+        
+        .field-errors {
+            margin-top: 8px;
+            padding: 10px 15px;
+            background: rgba(139, 69, 19, 0.3);
+            border-left: 3px solid #cd5c5c;
+            border-radius: 4px;
+            list-style: none;
+        }
+        
+        .field-errors li {
+            color: #e8b4a0;
+            font-size: 0.95em;
+            padding: 5px 0;
+        }
+        
+        .form-actions {
+            margin-top: 40px;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 16px 30px;
+            text-align: center;
+            text-decoration: none;
+            border: 2px solid;
+            border-radius: 8px;
+            font-size: 1.15em;
+            font-family: 'Crimson Text', serif;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, #8b5a2b, #654321);
+            color: #f5e6d3;
+            border-color: #d4a574;
+            box-shadow: 0 4px 15px rgba(139, 90, 43, 0.3);
+        }
+        
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #a0692f, #7a5228);
+            box-shadow: 0 6px 20px rgba(139, 90, 43, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .btn-cancel {
+            background: transparent;
+            color: #d4c5b0;
+            border-color: #8b7355;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-cancel:hover {
+            background: rgba(139, 115, 85, 0.2);
+            border-color: #d4a574;
+            color: #f5e6d3;
+        }
+        
+        @media (max-width: 768px) {
+            .form-panel {
+                padding: 25px;
+            }
+            
+            .form-title {
+                font-size: 1.8em;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <h1 class="form-title">📝 {{ title }}</h1>
+            <p class="form-subtitle">蔵書情報の登録・編集</p>
+        </div>
+
+        <div class="form-panel">
+            {% if form.non_field_errors %}
+            <ul class="error-list">
+                {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            <form method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-field">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                    <ul class="field-errors">
+                        {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-submit">💾 保存する</button>
+                    <a href="{% url 'book_list' %}" class="btn btn-cancel">❌ キャンセル</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

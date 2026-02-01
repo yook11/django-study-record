@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 import dj_database_url
 import os
 from pathlib import Path
+from datetime import timedelta
 
 from django.contrib.messages import constants as message_constants
 
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     "ninja",
     "corsheaders",
     "items",
+    "ninja_jwt",
 ]
 
 MIDDLEWARE = [
@@ -131,6 +133,23 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+NINJA_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'AUTH_COOKIE': 'access_token',
+    'AUTH_COOKIE_DOMAIN': None,
+    'AUTH_COOKIE_SECURE': False,
+    'AUTH_COOKIE_HTTP_ONLY': True,
+    'AUTH_COOKIE_SAMESITE': 'Lax',
+}
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+CORS_ALLOW_CREDENTIALS = True  # 👈 Cookie認証に必須！
+
+
 MESSAGE_LEVEL = message_constants.DEBUG
 
 # 画像を表示する時のURL
@@ -144,7 +163,4 @@ LOGIN_REDIRECT_URL = "todo_list"
 LOGOUT_REDIRECT_URL = "login"
 
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
+

@@ -3,6 +3,7 @@ services:
     build: ./myproject
     volumes:
       - ./myproject:/app
+      - /app/.venv
     ports:
       - "8000:8000"
     depends_on:

@@ -1,32 +1,29 @@
 """
 URL configuration for myproject project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/6.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.shortcuts import redirect
 from django.urls import include, path
-from ninja import NinjaAPI
-from items.api import router as items_router
+from ninja_jwt.controller import NinjaJWTDefaultController
+
+# 👇 1. ここを変更！ (標準の NinjaAPI ではなく、拡張版の NinjaExtraAPI を使う)
+from ninja_extra import NinjaExtraAPI
 
 from . import views
 
-api = NinjaAPI()
+# 👇 シンプル構成（パターン1）のルーター
+from items.api import router as items_router
+
+# 👇 2. ここも変更！
+api = NinjaExtraAPI()
+
+# これで register_controllers が使えるようになります！
+api.register_controllers(NinjaJWTDefaultController)
+
+# ルーター登録
 api.add_router("/items", items_router)
 
 urlpatterns = [

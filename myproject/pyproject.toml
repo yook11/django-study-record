@@ -19,7 +19,11 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "httpx>=0.28.1",
     "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
+    "pytest-django>=4.11.1",
+    "pytest-env>=1.2.0",
     "ruff>=0.14.14",
 ]
 
@@ -34,3 +38,16 @@ select = ["E", "F", "I"]
 [tool.ruff.lint.isort]
 # Djangoのプロジェクト名を指定して、インポート順を綺麗にする
 known-first-party = ["myproject"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "myproject.settings"
+python_files = ["test_*.py", "*_test.py"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+# 👇 これが超重要！
+# テストを実行する時だけ、環境変数を「ローカル用」に書き換えます
+env = [
+    "DATABASE_URL=postgres://postgres:password@localhost:5432/mydb",
+    "SECRET_KEY=test-secret-key"
+]

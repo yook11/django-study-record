@@ -1,10 +1,10 @@
-from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render
 
 from .models import Sample
-#from .pagination import CustomPagination
-#from .serializers import SampleSerializer
+
+# from .pagination import CustomPagination
+# from .serializers import SampleSerializer
 
 
 def sample_list(request):

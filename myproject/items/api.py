@@ -1,28 +1,34 @@
-from ninja import Router
 from typing import List
+
 from django.shortcuts import aget_object_or_404
-from ninja_jwt.authentication import JWTAuth
+from ninja import Router
+from ninja_jwt.authentication import AsyncJWTAuth
+
 from .models import Item
-from .schemas import ItemSchema, ItemCreateSchema
+from .schemas import ItemCreateSchema, ItemSchema
 
 router = Router()
+
 
 @router.get("", response=List[ItemSchema])
 async def list_items(request):
     return [item async for item in Item.objects.all()]
 
+
 @router.get("/{item_id}", response=ItemSchema)
 async def get_item(request, item_id: int):
     return await aget_object_or_404(Item, id=item_id)
 
-@router.post("", response=ItemSchema, auth=JWTAuth())
+
+@router.post("", response=ItemSchema, auth=AsyncJWTAuth())
 async def create_item(request, data: ItemCreateSchema):
     return await Item.objects.acreate(
-        name = data.name,
-        price = data.price,
+        name=data.name,
+        price=data.price,
     )
 
-@router.put("/{item_id}", response=ItemSchema, auth=JWTAuth())
+
+@router.put("/{item_id}", response=ItemSchema, auth=AsyncJWTAuth())
 async def update_item(request, item_id: int, data: ItemCreateSchema):
     item = await aget_object_or_404(Item, id=item_id)
     item.name = data.name
@@ -30,7 +36,8 @@ async def update_item(request, item_id: int, data: ItemCreateSchema):
     await item.asave()
     return item
 
-@router.delete("/{item_id}", auth=JWTAuth())
+
+@router.delete("/{item_id}", auth=AsyncJWTAuth())
 async def delete_item(request, item_id: int):
     item = await aget_object_or_404(Item, id=item_id)
     await item.adelete()

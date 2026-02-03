@@ -1,21 +1,22 @@
 """
 URL configuration for myproject project.
 """
+
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.shortcuts import redirect
 from django.urls import include, path
-from ninja_jwt.controller import NinjaJWTDefaultController
 
 # 👇 1. ここを変更！ (標準の NinjaAPI ではなく、拡張版の NinjaExtraAPI を使う)
 from ninja_extra import NinjaExtraAPI
-
-from . import views
+from ninja_jwt.controller import NinjaJWTDefaultController
 
 # 👇 シンプル構成（パターン1）のルーター
 from items.api import router as items_router
+
+from . import views
 
 # 👇 2. ここも変更！
 api = NinjaExtraAPI()

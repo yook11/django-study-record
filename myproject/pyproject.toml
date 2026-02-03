@@ -34,6 +34,7 @@ line-length = 100
 [tool.ruff.lint]
 # 適用するルールの選択 (E: pycodestyle, F: Pyflakes, I: isort)
 select = ["E", "F", "I"]
+ignore = ["E501"]
 
 [tool.ruff.lint.isort]
 # Djangoのプロジェクト名を指定して、インポート順を綺麗にする
@@ -49,5 +50,6 @@ asyncio_default_fixture_loop_scope = "function"
 # テストを実行する時だけ、環境変数を「ローカル用」に書き換えます
 env = [
     "DATABASE_URL=postgres://postgres:password@localhost:5432/mydb",
-    "SECRET_KEY=test-secret-key"
+    "SECRET_KEY=test-secret-key",
+    "NINJA_SKIP_REGISTRY=yes"
 ]

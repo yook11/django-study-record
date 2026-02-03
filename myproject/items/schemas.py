@@ -1,9 +1,11 @@
 from ninja import Schema
 
+
 class ItemSchema(Schema):
     id: int
     name: str
-    price:int
+    price: int
+
 
 class ItemCreateSchema(Schema):
     name: str

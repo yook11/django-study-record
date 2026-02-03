@@ -49,7 +49,7 @@ asyncio_default_fixture_loop_scope = "function"
 # 👇 これが超重要！
 # テストを実行する時だけ、環境変数を「ローカル用」に書き換えます
 env = [
-    "DATABASE_URL=postgres://postgres:password@localhost:5432/mydb",
-    "SECRET_KEY=test-secret-key",
-    "NINJA_SKIP_REGISTRY=yes"
+    "D:DATABASE_URL=postgres://postgres:password@localhost:5432/mydb",
+    "D:SECRET_KEY=test-secret-key",
+    "D:NINJA_SKIP_REGISTRY=yes",
 ]

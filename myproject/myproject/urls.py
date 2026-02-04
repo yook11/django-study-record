@@ -17,6 +17,7 @@ from ninja_jwt.controller import NinjaJWTDefaultController
 from items.api import router as items_router
 
 from . import views
+from .auth_api import router as auth_router
 
 # 👇 2. ここも変更！
 api = NinjaExtraAPI()
@@ -26,6 +27,7 @@ api.register_controllers(NinjaJWTDefaultController)
 
 # ルーター登録
 api.add_router("/items", items_router)
+api.add_router("/auth", auth_router)
 
 urlpatterns = [
     path("", lambda request: redirect("menu"), name="home"),

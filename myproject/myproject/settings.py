@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "items",
     "ninja_jwt",
+    'ninja_extra',
 ]
 
 MIDDLEWARE = [

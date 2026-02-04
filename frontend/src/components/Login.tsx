@@ -26,8 +26,9 @@ const Login = () => {
 
       <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
         <div>
-          <label style={{ display: 'block', marginBottom: '5px' }}>ユーザー名</label>
+          <label htmlFor="username" style={{ display: 'block', marginBottom: '5px' }}>ユーザー名</label>
           <input
+            id="username"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -37,8 +38,9 @@ const Login = () => {
         </div>
 
         <div>
-          <label style={{ display: 'block', marginBottom: '5px' }}>パスワード</label>
+          <label htmlFor="password" style={{ display: 'block', marginBottom: '5px' }}>パスワード</label>
           <input
+            id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

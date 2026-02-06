@@ -5,14 +5,27 @@ import type { components } from "./schema";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
-export const useGetItems = () => {
+// パラメータ型定義
+interface PaginationParams {
+    limit?: number;
+    offset?: number;
+}
+
+export const useGetItems = (params?: PaginationParams) => {
+    const limit = params?.limit ?? 10;
+    const offset = params?.offset ?? 0;
+
     return useQuery({
-        queryKey: ["items"],
+        queryKey: ["items", { limit, offset }],
         queryFn: async () => {
-            const { data, error } = await client.GET("/api/items");
+            const { data, error } = await client.GET("/api/items", {
+                params: {
+                    query: { limit, offset }
+                }
+            });
             if (error) throw error;
             return data;
-        }  
+        }
     })
 }
 

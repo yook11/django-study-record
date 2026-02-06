@@ -1,0 +1,176 @@
+[
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$QD0RHUn9Fz4HtJMat5Q5CJ$b2HDN95E7wIRITEeRd8+PaS2VoddQiRcXvdaR2RG8e8=",
+    "last_login": "2026-01-19T10:58:43.909Z",
+    "is_superuser": true,
+    "username": "root",
+    "first_name": "",
+    "last_name": "",
+    "email": "root@sample.co.jp",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-12-31T01:31:37.590Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$aHQJIqFd4E5cxcWMk1sbR3$yr9ChibXv4RNahZPyQkQmWZTOytrx+bdEF5kKorA3Gw=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "voodoo",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-04T03:03:14.122Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$Der8YJhG3BeWwclOqA6wGf$KypwLZOye6a3grkHWyYuhL+3wjJw1AxAkoyLfIq85ok=",
+    "last_login": "2026-01-04T03:24:09.058Z",
+    "is_superuser": false,
+    "username": "voo",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-04T03:07:44.919Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$riGQB6CRQjNBj8BE7Wlj4E$0rgAv7h6VQQw4tgEuVhkS6UkOoNBnJkcvqg6ZPV5FT8=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "tarou",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-11T06:18:50Z",
+    "groups": [],
+    "user_permissions": [
+      [
+        "add_book",
+        "bookapp",
+        "book"
+      ],
+      [
+        "change_book",
+        "bookapp",
+        "book"
+      ],
+      [
+        "delete_book",
+        "bookapp",
+        "book"
+      ],
+      [
+        "add_todo",
+        "todoapp",
+        "todo"
+      ],
+      [
+        "change_todo",
+        "todoapp",
+        "todo"
+      ],
+      [
+        "delete_todo",
+        "todoapp",
+        "todo"
+      ]
+    ]
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$1c2pDLZowXmdBIrQGaJ0kw$ip5xgGcQ76BHr0/V8VSrNOJpXJ0ttflAmkvD9v8OXIM=",
+    "last_login": "2026-01-15T02:14:28.189Z",
+    "is_superuser": false,
+    "username": "jirou",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-11T06:21:02Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$dgvq1og9nUMIms2EIJPKK9$UAPgLUHGNeUSOWWs+6GhXSnYaNl/MBQPdcFDdDh4mbE=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "testuser",
+    "first_name": "",
+    "last_name": "",
+    "email": "test@example.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-02-03T23:46:54.072Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$S4CDplsmGKyo6Hfd4aQRQy$RaQGfUAJl5ZtBv+MrYZvZX0N6Dfv9hRvmh0ZUjLx0Bs=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@example.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-02-03T23:55:15.724Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "items.item",
+  "pk": 72,
+  "fields": {
+    "name": "サンプル商品A",
+    "price": 1000
+  }
+},
+{
+  "model": "items.item",
+  "pk": 73,
+  "fields": {
+    "name": "サンプル商品B",
+    "price": 2000
+  }
+},
+{
+  "model": "items.item",
+  "pk": 74,
+  "fields": {
+    "name": "サンプル商品C",
+    "price": 3000
+  }
+}
+]

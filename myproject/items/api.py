@@ -1,19 +1,45 @@
 from typing import List
 
 from django.shortcuts import aget_object_or_404
-from ninja import Router
+from ninja import Router, Query
 
 from myproject.custom_auth import AsyncJWTAuthWithCookie
 
 from .models import Item
-from .schemas import ItemCreateSchema, ItemSchema
+from .schemas import ItemCreateSchema, ItemSchema, PaginatedItemsResponse
 
 router = Router()
 
 
-@router.get("", response=List[ItemSchema], auth=AsyncJWTAuthWithCookie())
-async def list_items(request):
-    return [item async for item in Item.objects.all()]
+@router.get("", response=PaginatedItemsResponse, auth=AsyncJWTAuthWithCookie())
+async def list_items(
+    request,
+    limit: int = Query(10, ge=1, le=100, description="Number of items per page"),
+    offset: int = Query(0, ge=0, description="Starting position for pagination")
+):
+    """
+    List items with pagination support.
+
+    Query Parameters:
+        - limit: Number of items to return (default: 10, max: 100)
+        - offset: Number of items to skip (default: 0)
+
+    Returns:
+        PaginatedItemsResponse with items, count, limit, and offset
+    """
+    # Get total count (native async - Django 6.0+)
+    total_count = await Item.objects.acount()
+
+    # Get paginated items (native async iteration with slicing)
+    queryset = Item.objects.order_by('-id')[offset:offset + limit]
+    items = [item async for item in queryset]
+
+    return {
+        "items": items,
+        "count": total_count,
+        "limit": limit,
+        "offset": offset,
+    }
 
 
 @router.get("/{item_id}", response=ItemSchema, auth=AsyncJWTAuthWithCookie())

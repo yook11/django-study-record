@@ -1,16 +1,28 @@
 import { useState } from 'react'
 import { useGetItems, useCreateItem, useDeleteItem } from '../api/hooks'
+import { ItemList } from './ItemList'
 
 function ItemManager() {
+  // フォーム状態
   const [newName, setNewName] = useState('')
   const [newPrice, setNewPrice] = useState('')
 
-  // TanStack Query フック
-  const { data: items, isLoading, error } = useGetItems()
+  // ページネーション状態
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
+
+  // offset計算
+  const offset = (currentPage - 1) * itemsPerPage
+
+  // TanStack Query フック（ページネーション対応）
+  const { data, isLoading, error } = useGetItems({
+    limit: itemsPerPage,
+    offset
+  })
   const createItem = useCreateItem()
   const deleteItem = useDeleteItem()
 
-  // 新規作成
+  // 新規作成（作成後は1ページ目にリセット）
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!newName || !newPrice) return
@@ -21,18 +33,25 @@ function ItemManager() {
         onSuccess: () => {
           setNewName('')
           setNewPrice('')
+          setCurrentPage(1)  // 1ページ目にリセット（新商品は先頭に表示されるため）
         }
       }
     )
   }
 
-  // 削除
+  // 削除（最後の1件を削除した場合は前ページへ）
   const handleDelete = (id: number) => {
-    deleteItem.mutate(id)
+    deleteItem.mutate(id, {
+      onSuccess: () => {
+        const itemsOnCurrentPage = data?.items?.length ?? 0
+        // 現在ページの最後の1件を削除 & 1ページ目でない場合
+        if (itemsOnCurrentPage === 1 && currentPage > 1) {
+          setCurrentPage(prev => prev - 1)
+        }
+        // それ以外は現在ページ維持（TanStack Queryが自動再フェッチ）
+      }
+    })
   }
-
-  if (isLoading) return <p>読み込み中...</p>
-  if (error) return <p>エラーが発生しました</p>
 
   return (
     <div className="App">
@@ -57,15 +76,17 @@ function ItemManager() {
         </button>
       </form>
 
-      {/* 一覧表示 */}
-      <ul>
-        {items?.map((item) => (
-          <li key={item.id}>
-            {item.name} - ¥{item.price}
-            <button onClick={() => handleDelete(item.id)}>削除</button>
-          </li>
-        ))}
-      </ul>
+      {/* 一覧表示（ItemListコンポーネント使用） */}
+      <ItemList
+        items={data?.items ?? []}
+        totalCount={data?.count ?? 0}
+        currentPage={currentPage}
+        itemsPerPage={itemsPerPage}
+        isLoading={isLoading}
+        error={error}
+        onDelete={handleDelete}
+        onPageChange={setCurrentPage}
+      />
     </div>
   )
 }

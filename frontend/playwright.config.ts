@@ -23,25 +23,26 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('')`. */
     baseURL: 'http://localhost:5173',
 
-    /* Collect trace when retrying the failed test. */
-    trace: 'on-first-retry',
+    /* 失敗時のみトレースとスクリーンショットを保存 */
+    trace: 'retain-on-failure',
+    screenshot: 'only-on-failure',
   },
 
   /* Configure projects for major browsers */
   projects: [
+    // 認証用のセットアッププロジェクト
+    {
+      name: 'setup',
+      testMatch: /.*\.setup\.ts/,
+    },
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
-
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        // Global Setupで保存した認証状態を使用
+        storageState: 'playwright/.auth/user.json',
+      },
+      dependencies: ['setup'],
     },
   ],
 

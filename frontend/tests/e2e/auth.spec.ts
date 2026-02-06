@@ -1,6 +1,9 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('認証フロー', () => {
+  // このdescribeブロック全体で認証情報をクリア（未認証状態でテスト）
+  test.use({ storageState: { cookies: [], origins: [] } });
+
   test.beforeEach(async ({ page }) => {
     // 各テスト前にログインページへ
     await page.goto('/login');

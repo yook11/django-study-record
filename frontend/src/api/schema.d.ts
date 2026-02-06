@@ -4,6 +4,57 @@
  */
 
 export interface paths {
+    "/api/token/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Verify Token */
+        post: operations["token_verify"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/token/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Refresh Token */
+        post: operations["token_refresh"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/token/pair": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Obtain Token */
+        post: operations["token_obtain_pair"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/items": {
         parameters: {
             query?: never;
@@ -11,7 +62,17 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List Items */
+        /**
+         * List Items
+         * @description List items with pagination support.
+         *
+         *     Query Parameters:
+         *         - limit: Number of items to return (default: 10, max: 100)
+         *         - offset: Number of items to skip (default: 0)
+         *
+         *     Returns:
+         *         PaginatedItemsResponse with items, count, limit, and offset
+         */
         get: operations["items_api_list_items"];
         put?: never;
         /** Create Item */
@@ -41,10 +102,71 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Login */
+        post: operations["myproject_auth_api_login"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** Schema */
+        Schema: Record<string, never>;
+        /** TokenVerifyInputSchema */
+        TokenVerifyInputSchema: {
+            /** Token */
+            token: string;
+        };
+        /** TokenRefreshOutputSchema */
+        TokenRefreshOutputSchema: {
+            /** Refresh */
+            refresh: string;
+            /** Access */
+            access: string | null;
+        };
+        /** TokenRefreshInputSchema */
+        TokenRefreshInputSchema: {
+            /** Refresh */
+            refresh: string;
+        };
+        /** TokenObtainPairOutputSchema */
+        TokenObtainPairOutputSchema: {
+            /**
+             * ユーザー名
+             * @description この項目は必須です。半角アルファベット、半角数字、@/./+/-/_ で150文字以下にしてください。
+             */
+            username: string;
+            /** Refresh */
+            refresh: string;
+            /** Access */
+            access: string;
+        };
+        /** TokenObtainPairInputSchema */
+        TokenObtainPairInputSchema: {
+            /**
+             * Password
+             * Format: password
+             */
+            password: string;
+            /**
+             * ユーザー名
+             * @description この項目は必須です。半角アルファベット、半角数字、@/./+/-/_ で150文字以下にしてください。
+             */
+            username: string;
+        };
         /** ItemSchema */
         ItemSchema: {
             /** Id */
@@ -54,12 +176,39 @@ export interface components {
             /** Price */
             price: number;
         };
+        /**
+         * PaginatedItemsResponse
+         * @description Paginated response for items list.
+         *
+         *     Attributes:
+         *         items: List of items for the current page
+         *         count: Total number of items across all pages
+         *         limit: Number of items per page (requested)
+         *         offset: Starting position for this page
+         */
+        PaginatedItemsResponse: {
+            /** Items */
+            items: components["schemas"]["ItemSchema"][];
+            /** Count */
+            count: number;
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+        };
         /** ItemCreateSchema */
         ItemCreateSchema: {
             /** Name */
             name: string;
             /** Price */
             price: number;
+        };
+        /** LoginInput */
+        LoginInput: {
+            /** Username */
+            username: string;
+            /** Password */
+            password: string;
         };
     };
     responses: never;
@@ -70,9 +219,86 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    items_api_list_items: {
+    token_verify: {
         parameters: {
             query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TokenVerifyInputSchema"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Schema"];
+                };
+            };
+        };
+    };
+    token_refresh: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TokenRefreshInputSchema"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TokenRefreshOutputSchema"];
+                };
+            };
+        };
+    };
+    token_obtain_pair: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TokenObtainPairInputSchema"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TokenObtainPairOutputSchema"];
+                };
+            };
+        };
+    };
+    items_api_list_items: {
+        parameters: {
+            query?: {
+                /** @description Number of items per page */
+                limit?: number;
+                /** @description Starting position for pagination */
+                offset?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -85,7 +311,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ItemSchema"][];
+                    "application/json": components["schemas"]["PaginatedItemsResponse"];
                 };
             };
         };
@@ -172,6 +398,28 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    myproject_auth_api_login: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginInput"];
+            };
+        };
         responses: {
             /** @description OK */
             200: {

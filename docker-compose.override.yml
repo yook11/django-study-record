@@ -1,0 +1,18 @@
+# ローカル開発専用設定（docker compose up で自動読み込み）
+services:
+  backend:
+    volumes:
+      # ソースコードのマウント（ホットリロード用）
+      - ./myproject:/app
+      # .venv はコンテナ内に保持（パフォーマンス対策）
+      - /app/.venv
+    environment:
+      - DEBUG=True
+    # 開発時は stdin を開いておく（デバッグ用）
+    stdin_open: true
+    tty: true
+
+  db:
+    # ローカルからの直接接続を許可
+    ports:
+      - "5432:5432"

@@ -1,6 +1,9 @@
 import { useState } from 'react'
-import { useGetItems, useCreateItem, useDeleteItem } from '../api/hooks'
+import { useGetItems, useCreateItem, useUpdateItem, useDeleteItem } from '../api/hooks'
 import { ItemList } from './ItemList'
+import type { components } from '../api/schema'
+
+type ItemSchema = components["schemas"]["ItemSchema"]
 
 function ItemManager() {
   // フォーム状態
@@ -14,29 +17,60 @@ function ItemManager() {
   // offset計算
   const offset = (currentPage - 1) * itemsPerPage
 
+  // 編集状態
+  const [editingItem, setEditingItem] = useState<ItemSchema | null>(null)
+
   // TanStack Query フック（ページネーション対応）
   const { data, isLoading, error } = useGetItems({
     limit: itemsPerPage,
     offset
   })
   const createItem = useCreateItem()
+  const updateItem = useUpdateItem()
   const deleteItem = useDeleteItem()
 
-  // 新規作成（作成後は1ページ目にリセット）
+  // 編集開始
+  const handleEdit = (item: ItemSchema) => {
+    setEditingItem(item)
+    setNewName(item.name)
+    setNewPrice(String(item.price))
+  }
+
+  // 編集キャンセル
+  const handleCancelEdit = () => {
+    setEditingItem(null)
+    setNewName('')
+    setNewPrice('')
+  }
+
+  // 新規作成 or 更新
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!newName || !newPrice) return
 
-    createItem.mutate(
-      { name: newName, price: Number(newPrice) },
-      {
-        onSuccess: () => {
-          setNewName('')
-          setNewPrice('')
-          setCurrentPage(1)  // 1ページ目にリセット（新商品は先頭に表示されるため）
+    if (editingItem) {
+      updateItem.mutate(
+        { itemId: editingItem.id, data: { name: newName, price: Number(newPrice) } },
+        {
+          onSuccess: () => {
+            setEditingItem(null)
+            setNewName('')
+            setNewPrice('')
+          }
         }
-      }
-    )
+      )
+    } else {
+      createItem.mutate(
+        { name: newName, price: Number(newPrice) },
+        {
+          onSuccess: () => {
+            setNewName('')
+            setNewPrice('')
+            setCurrentPage(1)
+          }
+        }
+      )
+    }
   }
 
   // 削除（最後の1件を削除した場合は前ページへ）
@@ -71,9 +105,17 @@ function ItemManager() {
           value={newPrice}
           onChange={(e) => setNewPrice(e.target.value)}
         />
-        <button type="submit" disabled={createItem.isPending}>
-          {createItem.isPending ? '追加中...' : '追加'}
+        <button type="submit" disabled={editingItem ? updateItem.isPending : createItem.isPending}>
+          {editingItem
+            ? (updateItem.isPending ? '更新中...' : '更新')
+            : (createItem.isPending ? '追加中...' : '追加')
+          }
         </button>
+        {editingItem && (
+          <button type="button" onClick={handleCancelEdit}>
+            キャンセル
+          </button>
+        )}
       </form>
 
       {/* 一覧表示（ItemListコンポーネント使用） */}
@@ -85,6 +127,7 @@ function ItemManager() {
         isLoading={isLoading}
         error={error}
         onDelete={handleDelete}
+        onEdit={handleEdit}
         onPageChange={setCurrentPage}
       />
     </div>

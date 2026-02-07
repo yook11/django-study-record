@@ -11,6 +11,7 @@ interface ItemListProps {
   isLoading: boolean;
   error: Error | null;
   onDelete: (id: number) => void;
+  onEdit: (item: ItemSchema) => void;
   onPageChange: (page: number) => void;
 }
 
@@ -22,6 +23,7 @@ export const ItemList = ({
   isLoading,
   error,
   onDelete,
+  onEdit,
   onPageChange
 }: ItemListProps) => {
   // ローディング・エラー表示
@@ -61,23 +63,38 @@ export const ItemList = ({
                   </span>
                 </div>
 
-                <button
-                  onClick={() => {
-                    if (window.confirm(`「${item.name}」を削除しますか？`)) {
-                      onDelete(item.id);
-                    }
-                  }}
-                  style={{
-                    backgroundColor: "#ff4d4f",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "4px",
-                    padding: "8px 12px",
-                    cursor: "pointer",
-                  }}
-                >
-                  削除
-                </button>
+                <div style={{ display: "flex", gap: "8px" }}>
+                  <button
+                    onClick={() => onEdit(item)}
+                    style={{
+                      backgroundColor: "#1890ff",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "4px",
+                      padding: "8px 12px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    編集
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (window.confirm(`「${item.name}」を削除しますか？`)) {
+                        onDelete(item.id);
+                      }
+                    }}
+                    style={{
+                      backgroundColor: "#ff4d4f",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "4px",
+                      padding: "8px 12px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    削除
+                  </button>
+                </div>
               </li>
             ))}
           </ul>

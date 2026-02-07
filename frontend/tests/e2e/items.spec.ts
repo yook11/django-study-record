@@ -126,6 +126,68 @@ test.describe('商品CRUD操作', () => {
   });
 });
 
+test.describe('商品編集操作', () => {
+  test('商品編集 - 商品の名前と価格を編集できる', async ({ page }) => {
+    // 既存商品の編集ボタンをクリック
+    const targetItem = page.getByRole('listitem').filter({ hasText: 'サンプル商品A' });
+    await expect(targetItem).toBeVisible();
+    await targetItem.getByRole('button', { name: '編集' }).click();
+
+    // フォームに既存の値がセットされていることを確認
+    await expect(page.getByPlaceholder('名前')).toHaveValue('サンプル商品A');
+
+    // 値を変更
+    await page.getByPlaceholder('名前').clear();
+    await page.getByPlaceholder('名前').fill('編集済み商品');
+    await page.getByPlaceholder('価格').clear();
+    await page.getByPlaceholder('価格').fill('9999');
+
+    // 更新ボタンをクリック
+    await page.getByRole('button', { name: '更新' }).click();
+
+    // API応答を待機
+    await page.waitForResponse(response =>
+      response.url().includes('/api/items') && response.request().method() === 'PUT'
+    );
+
+    // 更新された商品が一覧に表示されることを確認
+    await expect(page.getByRole('listitem').filter({ hasText: '編集済み商品' })).toBeVisible();
+    await expect(page.getByRole('listitem').filter({ hasText: '¥9999' })).toBeVisible();
+
+    // 元の商品名が消えていることを確認
+    await expect(page.getByText('サンプル商品A')).not.toBeVisible();
+
+    // フォームがクリアされていることを確認
+    await expect(page.getByPlaceholder('名前')).toHaveValue('');
+    await expect(page.getByPlaceholder('価格')).toHaveValue('');
+  });
+
+  test('商品編集キャンセル - 編集をキャンセルするとフォームがクリアされる', async ({ page }) => {
+    // 編集ボタンをクリック
+    const targetItem = page.getByRole('listitem').filter({ hasText: 'サンプル商品B' });
+    await targetItem.getByRole('button', { name: '編集' }).click();
+
+    // フォームに値がセットされていることを確認
+    await expect(page.getByPlaceholder('名前')).toHaveValue('サンプル商品B');
+
+    // キャンセルボタンが表示されていることを確認してクリック
+    await page.getByRole('button', { name: 'キャンセル' }).click();
+
+    // フォームがクリアされていることを確認
+    await expect(page.getByPlaceholder('名前')).toHaveValue('');
+    await expect(page.getByPlaceholder('価格')).toHaveValue('');
+
+    // キャンセルボタンが消えていることを確認
+    await expect(page.getByRole('button', { name: 'キャンセル' })).not.toBeVisible();
+
+    // 追加ボタンが表示されていることを確認
+    await expect(page.getByRole('button', { name: '追加' })).toBeVisible();
+
+    // 商品一覧は変更されていないことを確認
+    await expect(page.getByRole('listitem')).toHaveCount(3);
+  });
+});
+
 test.describe('商品一覧ページネーション', () => {
   test('複数ページの表示とナビゲーション', async ({ page, request }) => {
     // API経由で追加の12件を作成（Fixture3件 + 12件 = 15件で2ページ分）

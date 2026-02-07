@@ -205,3 +205,47 @@ async def test_list_items_invalid_parameters(async_client, auth_headers, db):
     # Zero limit (should fail validation due to ge=1)
     response = await async_client.get("/items?limit=0", headers=auth_headers)
     assert response.status_code == 422
+
+
+@pytest.mark.django_db(transaction=True)
+@pytest.mark.asyncio
+async def test_update_item_with_auth(async_client, auth_headers, db):
+    """Test updating an item with authentication"""
+    item = await Item.objects.acreate(name="更新前", price=100)
+
+    response = await async_client.put(
+        f"/items/{item.id}",
+        json={"name": "更新後", "price": 200},
+        headers=auth_headers,
+    )
+    assert response.status_code == 200
+
+    data = response.json()
+    assert data["name"] == "更新後"
+    assert data["price"] == 200
+    assert data["id"] == item.id
+
+
+@pytest.mark.django_db(transaction=True)
+@pytest.mark.asyncio
+async def test_update_item_without_auth(async_client, db):
+    """Test updating an item without authentication returns 401"""
+    item = await Item.objects.acreate(name="テスト", price=100)
+
+    response = await async_client.put(
+        f"/items/{item.id}",
+        json={"name": "変更", "price": 200},
+    )
+    assert response.status_code == 401
+
+
+@pytest.mark.django_db(transaction=True)
+@pytest.mark.asyncio
+async def test_update_nonexistent_item(async_client, auth_headers, db):
+    """Test updating a nonexistent item returns 404"""
+    response = await async_client.put(
+        "/items/99999",
+        json={"name": "存在しない", "price": 100},
+        headers=auth_headers,
+    )
+    assert response.status_code == 404

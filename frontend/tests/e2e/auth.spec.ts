@@ -57,3 +57,30 @@ test.describe('認証フロー', () => {
     await expect(page.getByLabel('パスワード')).toHaveAttribute('required');
   });
 });
+
+test.describe('ログアウトフロー', () => {
+  // 認証済み状態でテスト（Global Setupの storageState を使用）
+
+  test.beforeEach(async ({ request }) => {
+    // DBリセット
+    const resetResponse = await request.post('http://localhost:8000/api/test/reset-db');
+    expect(resetResponse.status()).toBe(200);
+  });
+
+  test('ログアウト成功 - /loginにリダイレクトされる', async ({ page }) => {
+    // 認証済みで /items にアクセス
+    await page.goto('/items');
+    await expect(page.getByRole('heading', { name: 'Items管理アプリ' })).toBeVisible();
+
+    // ログアウトボタンをクリック
+    await page.getByRole('button', { name: 'ログアウト' }).click();
+
+    // ログアウトAPI応答を待機
+    await page.waitForResponse(response =>
+      response.url().includes('/api/auth/logout') && response.status() === 200
+    );
+
+    // /loginにリダイレクトされることを確認
+    await expect(page).toHaveURL('/login');
+  });
+});

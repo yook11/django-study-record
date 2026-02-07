@@ -92,6 +92,28 @@ export const useDeleteItem = () => {
     });
 };
 
+export const useLogout = () => {
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
+
+    return useMutation({
+        mutationFn: async () => {
+            const response = await fetch(`${API_BASE_URL}/api/auth/logout`, {
+                method: 'POST',
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                throw new Error('ログアウトに失敗しました');
+            }
+        },
+        onSettled: () => {
+            queryClient.clear();
+            navigate('/login');
+        },
+    });
+};
+
 export const useLogin = () => {
     const navigate = useNavigate();
 

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useGetItems, useCreateItem, useUpdateItem, useDeleteItem } from '../api/hooks'
+import { useGetItems, useCreateItem, useUpdateItem, useDeleteItem, useLogout } from '../api/hooks'
 import { ItemList } from './ItemList'
 import type { components } from '../api/schema'
 
@@ -28,6 +28,7 @@ function ItemManager() {
   const createItem = useCreateItem()
   const updateItem = useUpdateItem()
   const deleteItem = useDeleteItem()
+  const logout = useLogout()
 
   // 編集開始
   const handleEdit = (item: ItemSchema) => {
@@ -89,7 +90,24 @@ function ItemManager() {
 
   return (
     <div className="App">
-      <h1>Items管理アプリ</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h1>Items管理アプリ</h1>
+        <button
+          type="button"
+          onClick={() => logout.mutate()}
+          disabled={logout.isPending}
+          style={{
+            backgroundColor: '#6c757d',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            padding: '8px 16px',
+            cursor: logout.isPending ? 'not-allowed' : 'pointer',
+          }}
+        >
+          {logout.isPending ? 'ログアウト中...' : 'ログアウト'}
+        </button>
+      </div>
 
       {/* 新規作成フォーム */}
       <form onSubmit={handleSubmit}>

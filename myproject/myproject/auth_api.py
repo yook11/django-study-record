@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+from django.http import HttpResponse
 from ninja import Router, Schema
 from ninja.responses import Response
 from ninja_jwt.tokens import RefreshToken
@@ -44,3 +45,9 @@ def login(request, data: LoginInput):
     )
 
     return response
+
+
+@router.post("/logout")
+def logout(request, response: HttpResponse):
+    response.delete_cookie("access_token")
+    return {"message": "Logged out"}

@@ -69,7 +69,7 @@ root/
 
 ### フェーズ 1: 開発基盤の刷新
 - [x] uv / Ruff の導入
-- [ ] Docker化（開発環境の統一）
+- [x] Docker化（開発環境の統一）
 
 ### フェーズ 2: バックエンドのAPI化
 - [x] Django Ninja導入とスキーマ設計
@@ -92,5 +92,5 @@ root/
 - [x] Pytest移行 (Async対応)
 - [x] Playwright導入 (E2E)
 - [x] DBリセットAPI (`/api/test/reset-db`)
-- [ ] CI/CD (GitHub Actions)
+- [x] CI/CD (GitHub Actions)
 - [ ] Visual Regression Testing

@@ -1,3 +1,4 @@
+from django.conf import settings as django_settings
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
 from ninja import Router, Schema
@@ -34,14 +35,15 @@ def login(request, data: LoginInput):
         }
     )
 
-    # Cookieにアクセストークンを設定（完璧です！）
+    jwt_settings = django_settings.NINJA_JWT
     response.set_cookie(
-        key="access_token",
+        key=jwt_settings["AUTH_COOKIE"],
         value=access_token,
-        httponly=True,
-        samesite="Lax",
-        secure=False,  # 開発環境用
-        max_age=900,  # 15分
+        httponly=jwt_settings["AUTH_COOKIE_HTTP_ONLY"],
+        samesite=jwt_settings["AUTH_COOKIE_SAMESITE"],
+        secure=jwt_settings["AUTH_COOKIE_SECURE"],
+        domain=jwt_settings["AUTH_COOKIE_DOMAIN"],
+        max_age=int(jwt_settings["ACCESS_TOKEN_LIFETIME"].total_seconds()),
     )
 
     return response
@@ -49,5 +51,10 @@ def login(request, data: LoginInput):
 
 @router.post("/logout")
 def logout(request, response: HttpResponse):
-    response.delete_cookie("access_token")
+    jwt_settings = django_settings.NINJA_JWT
+    response.delete_cookie(
+        jwt_settings["AUTH_COOKIE"],
+        domain=jwt_settings["AUTH_COOKIE_DOMAIN"],
+        samesite=jwt_settings["AUTH_COOKIE_SAMESITE"],
+    )
     return {"message": "Logged out"}

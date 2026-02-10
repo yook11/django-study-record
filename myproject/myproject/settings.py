@@ -21,16 +21,29 @@ from django.contrib.messages import constants as message_constants
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
+# ---- Environment Detection ----
+DJANGO_ENV = os.environ.get("DJANGO_ENV", "development")
+IS_PRODUCTION = DJANGO_ENV == "production"
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-^b#poz5_$@t&i41u=1q^%wc_rvjy*tik5@io3&bp+ml17v)$-&"
+# ---- SECRET_KEY ----
+if IS_PRODUCTION:
+    SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]  # 未設定なら即 KeyError
+else:
+    SECRET_KEY = os.environ.get(
+        "DJANGO_SECRET_KEY",
+        "django-insecure-^b#poz5_$@t&i41u=1q^%wc_rvjy*tik5@io3&bp+ml17v)$-&",
+    )
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = not IS_PRODUCTION
 
-ALLOWED_HOSTS = []
+# ---- ALLOWED_HOSTS ----
+if IS_PRODUCTION:
+    _hosts = os.environ.get("DJANGO_ALLOWED_HOSTS", "")
+    if not _hosts:
+        raise ValueError("Production requires DJANGO_ALLOWED_HOSTS env var")
+    ALLOWED_HOSTS = [h.strip() for h in _hosts.split(",")]
+else:
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
 
 # Application definition
 
@@ -130,21 +143,46 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+# ---- JWT Cookie Configuration ----
 NINJA_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "AUTH_COOKIE": "access_token",
-    "AUTH_COOKIE_DOMAIN": None,
-    "AUTH_COOKIE_SECURE": False,
+    "AUTH_COOKIE_DOMAIN": os.environ.get("AUTH_COOKIE_DOMAIN", None),
+    "AUTH_COOKIE_SECURE": IS_PRODUCTION,
     "AUTH_COOKIE_HTTP_ONLY": True,
     "AUTH_COOKIE_SAMESITE": "Lax",
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
-CORS_ALLOW_CREDENTIALS = True  # 👈 Cookie認証に必須！
+# ---- CORS Configuration ----
+CORS_ALLOW_CREDENTIALS = True
+
+if IS_PRODUCTION:
+    _cors_origins = os.environ.get("CORS_ORIGINS", "")
+    if not _cors_origins:
+        raise ValueError("Production requires CORS_ORIGINS env var")
+    CORS_ALLOWED_ORIGINS = [o.strip() for o in _cors_origins.split(",")]
+else:
+    CORS_ALLOWED_ORIGINS = [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ]
+
+# ---- CSRF Configuration ----
+if IS_PRODUCTION:
+    _csrf_origins = os.environ.get("CSRF_TRUSTED_ORIGINS", "")
+    if not _csrf_origins:
+        raise ValueError(
+            "Production requires CSRF_TRUSTED_ORIGINS env var (needed for Django admin)"
+        )
+    CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf_origins.split(",")]
+else:
+    CSRF_TRUSTED_ORIGINS = [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+    ]
 
 
 MESSAGE_LEVEL = message_constants.DEBUG
@@ -158,3 +196,15 @@ MEDIA_ROOT = BASE_DIR / "media"
 LOGIN_REDIRECT_URL = "todo_list"
 
 LOGOUT_REDIRECT_URL = "login"
+
+# ---- Security Headers (Production Only) ----
+if IS_PRODUCTION:
+    SECURE_HSTS_SECONDS = 31536000  # 1年
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = "DENY"

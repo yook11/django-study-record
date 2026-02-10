@@ -86,7 +86,7 @@ root/
 ### フェーズ 4: 認証とセキュリティ
 - [x] JWT認証 (HttpOnly Cookie)
 - [x] ログイン機能の実装
-- [ ] CORS / CSRF 対策の強化
+- [x] CORS / CSRF 対策の強化
 
 ### フェーズ 5: 品質保証と運用
 - [x] Pytest移行 (Async対応)

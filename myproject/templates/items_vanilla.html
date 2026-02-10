@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Items Manager (Vanilla JS)</title>
+  <style>
+    /* ===========================
+       基本スタイル
+       =========================== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+    }
+    #app {
+      max-width: 640px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    h2 { font-size: 1.2rem; margin-bottom: 12px; }
+
+    /* カード */
+    .card {
+      background: white;
+      padding: 24px;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 16px;
+    }
+
+    /* フォーム */
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-weight: bold; margin-bottom: 4px; }
+    .form-group input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    /* ボタン */
+    button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary { background: #2563eb; color: white; }
+    .btn-primary:hover:not(:disabled) { background: #1d4ed8; }
+
+    /* エラー */
+    .error { color: #dc2626; margin-bottom: 12px; }
+    .loading { color: #6b7280; }
+
+    /* ヘッダー */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .header h1 { font-size: 1.5rem; }
+
+    .btn-secondary { background: #6b7280; color: white; }
+    .btn-secondary:hover:not(:disabled) { background: #4b5563; }
+    .btn-danger { background: #dc2626; color: white; }
+    .btn-danger:hover:not(:disabled) { background: #b91c1c; }
+    .btn-sm { padding: 4px 10px; font-size: 0.8rem; }
+    .item-actions { display: flex; gap: 6px; }
+
+    /* ページネーション */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    /* アイテムリスト */
+    .form-actions { display: flex; gap: 8px; margin-top: 12px; }
+
+    /* アイテムリスト */
+    .item-list { list-style: none; margin: 16px 0; }
+    .item-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <!-- 空の箱：JavaScript が中身を構築する -->
+  <div id="app">
+    <p>Loading...</p>
+  </div>
+
+  <script>
+    /* ==========================
+       1. State（状態管理）
+       ========================== */
+    let isLoggedIn = false;
+    let items = [];
+    let totalCount = 0;
+    let currentPage = 1;
+    const itemsPerPage = 10;
+    let isLoading = false;
+    let isSubmitting = false;
+    let errorMessage = '';
+    let editingItem = null; // null = 作成モード, {id, name, price} = 編集モード
+
+    /* ==========================
+       2. API Clients（通信）
+       ========================== */
+    async function apiLogin(username, password) {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ username, password }),
+      });
+      if (!res.ok) throw new Error('Invalid credentials');
+      return res.json();
+    }
+
+    async function apiLogout() {
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
+    }
+
+    async function apiFetchItems(limit, offset) {
+      const res = await fetch(`/api/items?limit=${limit}&offset=${offset}`, {
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        if (res.status === 401) {
+          isLoggedIn = false;
+          renderApp();
+          return null;
+        }
+        throw new Error(`API error: ${res.status}`);
+      }
+      return res.json();
+    }
+
+    async function apiCreateItem(name, price) {
+      const res = await fetch('/api/items', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ name, price: Number(price) }),
+      });
+      if (!res.ok) throw new Error('Create failed');
+      return res.json();
+    }
+
+    async function apiUpdateItem(id, name, price) {
+      const res = await fetch(`/api/items/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ name, price: Number(price) }),
+      });
+      if (!res.ok) throw new Error('Update failed');
+      return res.json();
+    }
+
+    async function apiDeleteItem(id) {
+      const res = await fetch(`/api/items/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      if (!res.ok) throw new Error('Delete failed');
+      return res.json();
+    }
+
+    /* ==========================
+       3. Render Functions（描画）
+       ========================== */
+
+    // 画面全体を書き換える親玉
+    function renderApp() {
+      if (!isLoggedIn) {
+        renderLoginForm();
+      } else {
+        renderItemManager();
+      }
+    }
+
+    // --- ログインフォーム ---
+    function renderLoginForm() {
+      const app = document.getElementById('app');
+      app.innerHTML = `
+        <div class="card" style="margin-top: 80px;">
+          <h2>Login</h2>
+          <div id="login-error" class="error" style="display:none;"></div>
+          <form id="login-form">
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" id="username" required />
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" required />
+            </div>
+            <button type="submit" id="login-btn" class="btn-primary">Login</button>
+          </form>
+        </div>
+      `;
+      attachLoginEvents();
+    }
+
+    // --- XSS対策: HTMLエスケープ ---
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // --- メイン画面 ---
+    function renderItemManager() {
+      const app = document.getElementById('app');
+
+      // アイテムリスト部分（状態に応じて切り替え）
+      let itemsHtml;
+      if (isLoading) {
+        itemsHtml = '<p class="loading">Loading...</p>';
+      } else if (errorMessage) {
+        itemsHtml = `<p class="error">Error: ${escapeHtml(errorMessage)}</p>`;
+      } else if (items.length === 0) {
+        itemsHtml = '<p>No items found.</p>';
+      } else {
+        // React なら items.map(item => <li>...</li>) で完了。
+        // Vanilla では文字列を組み立てて join する。
+        itemsHtml = '<ul class="item-list" id="items-list">' +
+          items.map(item => `
+            <li data-id="${item.id}">
+              <span><strong>${escapeHtml(item.name)}</strong> - &yen;${item.price}</span>
+              <div class="item-actions">
+                <button class="btn-primary btn-sm edit-btn" data-id="${item.id}">Edit</button>
+                <button class="btn-danger btn-sm delete-btn" data-id="${item.id}">Delete</button>
+              </div>
+            </li>
+          `).join('') +
+        '</ul>';
+      }
+
+      app.innerHTML = `
+        <div class="header">
+          <h1>Items Manager (Vanilla JS)</h1>
+          <button id="logout-btn" class="btn-secondary">Logout</button>
+        </div>
+        <div class="card">
+          <h2>${editingItem ? 'Edit Item' : 'New Item'}</h2>
+          <form id="item-form">
+            <div class="form-group">
+              <label for="item-name">Name</label>
+              <input type="text" id="item-name" required />
+            </div>
+            <div class="form-group">
+              <label for="item-price">Price</label>
+              <input type="number" id="item-price" required min="0" />
+            </div>
+            <div class="form-actions">
+              <button type="submit" id="submit-btn" class="btn-primary" ${isSubmitting ? 'disabled' : ''}>
+                ${editingItem
+                  ? (isSubmitting ? 'Updating...' : 'Update')
+                  : (isSubmitting ? 'Creating...' : 'Create')}
+              </button>
+              ${editingItem ? '<button type="button" id="cancel-edit-btn" class="btn-secondary">Cancel</button>' : ''}
+            </div>
+          </form>
+        </div>
+        ${itemsHtml}
+        ${renderPagination()}
+      `;
+
+      // 編集モードならフォームに値をセット
+      // React なら value={name} で宣言的に済む。Vanilla では render 後に手動で設定。
+      if (editingItem) {
+        document.getElementById('item-name').value = editingItem.name;
+        document.getElementById('item-price').value = editingItem.price;
+      }
+
+      // innerHTML で全破壊されたので、イベントリスナーを再設置
+      attachManagerEvents();
+    }
+
+    // --- ページネーション ---
+    function renderPagination() {
+      if (totalCount === 0) return '';
+      const totalPages = Math.ceil(totalCount / itemsPerPage);
+      const hasPrevious = currentPage > 1;
+      const hasNext = currentPage < totalPages;
+      return `
+        <div class="pagination">
+          <button id="prev-page" class="btn-secondary btn-sm" ${!hasPrevious ? 'disabled' : ''}>Previous</button>
+          <span>Page ${currentPage} / ${totalPages} (${totalCount} items)</span>
+          <button id="next-page" class="btn-secondary btn-sm" ${!hasNext ? 'disabled' : ''}>Next</button>
+        </div>
+      `;
+    }
+
+    // --- データ取得 ---
+    // renderItemManager() を2回呼ぶ: 1回目=Loading表示、2回目=結果表示
+    // React + TanStack Query なら isLoading の変化で自動再描画される
+    async function loadItems() {
+      isLoading = true;
+      errorMessage = '';
+      renderItemManager(); // 1回目: Loading 表示
+
+      try {
+        const offset = (currentPage - 1) * itemsPerPage;
+        const data = await apiFetchItems(itemsPerPage, offset);
+        if (data === null) return; // 401 で renderApp() 済み
+        items = data.items;
+        totalCount = data.count;
+      } catch (err) {
+        errorMessage = err.message;
+      } finally {
+        isLoading = false;
+        renderItemManager(); // 2回目: 結果表示
+      }
+    }
+
+    /* ==========================
+       4. Event Handlers（操作）
+       ========================== */
+
+    // --- ログイン画面のイベント ---
+    function attachLoginEvents() {
+      document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const errorDiv = document.getElementById('login-error');
+        const btn = document.getElementById('login-btn');
+
+        // ボタン無効化 + テキスト変更（React なら isPending で自動）
+        btn.disabled = true;
+        btn.textContent = 'Logging in...';
+        errorDiv.style.display = 'none';
+
+        try {
+          await apiLogin(username, password);
+          isLoggedIn = true;
+          renderApp();
+          loadItems(); // ログイン後にアイテム取得開始
+        } catch (err) {
+          // React なら setError('message') で自動再描画。ここでは手動で DOM を操作
+          errorDiv.textContent = 'Invalid username or password';
+          errorDiv.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Login';
+        }
+      });
+    }
+
+    // --- メイン画面のイベント ---
+    function attachManagerEvents() {
+      // ログアウト
+      document.getElementById('logout-btn').addEventListener('click', async () => {
+        await apiLogout();
+        isLoggedIn = false;
+        items = [];
+        totalCount = 0;
+        currentPage = 1;
+        editingItem = null;
+        renderApp();
+      });
+
+      // アイテム作成/更新フォーム
+      // React なら onSuccess で invalidateQueries → 自動再取得。
+      // Vanilla では手動で loadItems() を呼ぶ。忘れると UI が古いまま。
+      document.getElementById('item-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('item-name').value;
+        const price = document.getElementById('item-price').value;
+        if (!name || !price) return;
+
+        isSubmitting = true;
+        renderItemManager(); // ボタンを disabled に（入力値はここで消える！）
+
+        try {
+          if (editingItem) {
+            await apiUpdateItem(editingItem.id, name, Number(price));
+            editingItem = null;
+          } else {
+            await apiCreateItem(name, Number(price));
+            currentPage = 1;
+          }
+          await loadItems(); // ← これが手動の invalidateQueries
+        } catch (err) {
+          errorMessage = editingItem ? 'Update failed' : 'Create failed';
+          renderItemManager();
+        } finally {
+          isSubmitting = false;
+        }
+      });
+
+      // 編集キャンセルボタン
+      const cancelBtn = document.getElementById('cancel-edit-btn');
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+          editingItem = null;
+          renderItemManager();
+        });
+      }
+
+      // イベント委譲: アイテムリストの編集/削除ボタン
+      // React なら各ボタンに onClick={() => handleEdit(item)} でクロージャにデータを閉じ込め。
+      // Vanilla では親要素に1つだけリスナーを付け、data-id 属性で対象を特定する。
+      const list = document.getElementById('items-list');
+      if (list) {
+        list.addEventListener('click', async (e) => {
+          const target = e.target;
+
+          // 削除ボタン
+          if (target.classList.contains('delete-btn')) {
+            const id = Number(target.dataset.id);
+            const item = items.find(i => i.id === id);
+            if (confirm(`"${item.name}" を削除しますか？`)) {
+              try {
+                await apiDeleteItem(id);
+                // 最終ページの最後の1件なら前のページへ（React版と同じロジック）
+                if (items.length === 1 && currentPage > 1) {
+                  currentPage--;
+                }
+                await loadItems();
+              } catch (err) {
+                errorMessage = 'Delete failed';
+                renderItemManager();
+              }
+            }
+          }
+
+          // 編集ボタン
+          if (target.classList.contains('edit-btn')) {
+            const id = Number(target.dataset.id);
+            editingItem = items.find(i => i.id === id);
+            renderItemManager(); // render 後に input.value が設定される
+          }
+        });
+      }
+
+      // ページネーション
+      const prevBtn = document.getElementById('prev-page');
+      const nextBtn = document.getElementById('next-page');
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          currentPage--;
+          loadItems();
+        });
+      }
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          currentPage++;
+          loadItems();
+        });
+      }
+    }
+
+    /* ==========================
+       5. Init（初期化）
+       ========================== */
+    renderApp();
+  </script>
+</body>
+</html>

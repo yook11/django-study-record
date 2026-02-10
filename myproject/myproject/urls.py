@@ -8,6 +8,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.shortcuts import redirect
 from django.urls import include, path
+from django.views.generic import TemplateView
 
 # 👇 1. ここを変更！ (標準の NinjaAPI ではなく、拡張版の NinjaExtraAPI を使う)
 from ninja_extra import NinjaExtraAPI
@@ -41,5 +42,6 @@ urlpatterns = [
     path("login/", auth_views.LoginView.as_view(template_name="todoapp/login.html"), name="login"),
     path("logout/", views.custom_logout_view, name="logout"),
     path("exe05/", include("appendixapp.urls")),
+    path("vanilla/", TemplateView.as_view(template_name="items_vanilla.html"), name="vanilla_items"),
     path("api/", api.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
